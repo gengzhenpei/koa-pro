@@ -30,6 +30,16 @@ const auth = () => {
 		ctx.auth = {
 			...user
 		}
+		console.log('ctx', ctx.url.split('?')[0])
+		let url = ctx.url.split('?')[0]
+		console.log('user', user)
+		let whiteUrl = ['/article/v1/user_add', '/article/v1/user_add']
+		//白名单接口不需要验证
+		if(whiteUrl.indexOf(url)<0) {
+			if(!user) {
+				throw new exception.erroeException(consts.ERROR_CODE.NO_ACCESS_TOKEN)
+			}
+		}
 		await next()
 	}
 }
