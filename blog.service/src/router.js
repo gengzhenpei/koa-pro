@@ -1,4 +1,6 @@
 const controller = require('./controller');
+const apiController = require('./api/controller');
+
 const logs = require('./config/logConf.js')
 const consts = require('./utils/consts.js')
 const LogFile = logs.logFile('router');
@@ -37,5 +39,7 @@ module.exports = function(dir) {
 	let routers_dir = dir || 'controller',
 		router = require('koa-router')();
 	addMapping(router, controller);
+	addMapping(router, apiController);
+
 	return router.routes();
 };

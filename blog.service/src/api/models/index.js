@@ -10,9 +10,9 @@
  * 
  */
 var Sequelize = require('sequelize');
-var config = require('../config/default.js')
-var email = require('../utils/email.js')
-var logs = require('../config/logConf.js')
+var config = require('../../config/default.js')
+var email = require('../../utils/email.js')
+var logs = require('../../config/logConf.js')
 var LogFile = logs.logFile('sequelize-mysql');
 LogFile.info("sequelize-log_start start!");
 // 创建数据库连接	
@@ -44,5 +44,5 @@ sequelize.authenticate().then(() => {
 // 数据模型输出名称及路径
 module.exports = {
 	db: sequelize,
-	Admin: require('./skd_admin.js')(sequelize, Sequelize), Article: require('./skd_article.js')(sequelize, Sequelize), Role: require('./skd_role.js')(sequelize, Sequelize), Star: require('./skd_star.js')(sequelize, Sequelize), MysqlSessionStore: require('./_mysql_session_store.js')(sequelize, Sequelize),
+	User: require('./user.js')(sequelize, Sequelize), 
 }

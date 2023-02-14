@@ -22,6 +22,9 @@ const ARTICLE_API = {
 	article_search: ARTICLEAPI + API_VERSION + '/search',
 	upload: ARTICLEAPI + API_VERSION + '/upload',
 	music_163: ARTICLEAPI + API_VERSION + '/music_163',
+	user_add: ARTICLEAPI + API_VERSION + '/user_add',
+	login: ARTICLEAPI + API_VERSION + '/login',
+	
 };
 const UPLOAD_API = {
 	UPLOAD_AJXA: ARTICLEAPI + API_VERSION + '/upload',

@@ -15,7 +15,7 @@ import utils from './utils'
 
 axios.defaults.timeout = 5000
 axios.defaults.hasGlobalSpin = true
-
+axios.defaults.headers.common['access_token'] = localStorage.getItem('access_token')||''
 // POST传参序列化,增加token
 axios.interceptors.request.use((config) => {
 	return config
