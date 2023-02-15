@@ -24,6 +24,7 @@ const ARTICLE_API = {
 	music_163: ARTICLEAPI + API_VERSION + '/music_163',
 	user_add: ARTICLEAPI + API_VERSION + '/user_add',
 	login: ARTICLEAPI + API_VERSION + '/login',
+	category_list: ARTICLEAPI + API_VERSION + '/category_list',
 	
 };
 const UPLOAD_API = {

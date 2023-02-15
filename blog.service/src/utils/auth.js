@@ -31,7 +31,7 @@ const auth = () => {
 			...user
 		}
 		let url = ctx.url.split('?')[0]
-		let whiteUrl = ['/article/v1/user_add', '/article/v1/user_add']
+		let whiteUrl = ['/article/v1/user_add', '/article/v1/user_add', '/article/v1/article_list', '/article/v1/category_list']
 		//白名单接口不需要验证
 		if(whiteUrl.indexOf(url)<0) {
 			if(!user) {

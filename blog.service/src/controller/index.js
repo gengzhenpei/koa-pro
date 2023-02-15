@@ -16,5 +16,7 @@ module.exports = {
 	...require('./c-upload.js'),
 	...require('./c-file.js'),
 	...require('./c-music.js'),
-	...require('../test/test.js')
+	...require('../test/test.js'),
+	...require('./category.js')
+
 };

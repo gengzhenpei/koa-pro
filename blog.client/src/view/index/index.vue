@@ -9,17 +9,15 @@
 				</div>
 				<div class="articleMain">
 					<h2 class="skd-ellipsis">
-            <a @click="getArticle(item)">{{ item.title }}</a>
-          </h2>
+            			<a @click="getArticle(item)">{{ item.title }}</a>
+          			</h2>
 					<div class="articleConten">
 						<p>{{ item.summary }}</p>
 					</div>
 				</div>
 				<div class="foot skd-ellipsis">
 					<span> 阅读量：{{ item.number }} </span>
-					<span>
-            {{ item.create_time }}
-          </span>
+					<span>{{ item.create_time }}</span>
 					<span v-if="item.classify">分类：</span>
 					<template v-for="items in item.classify">
 						<Tag checked color="green" v-if="item.classify">{{ items }}</Tag>
@@ -83,10 +81,38 @@
 						console.log("失误：" + err);
 					});
 			},
+			getCategory() {
+				console.log('get')
+				axios({
+						method: "post",
+						url: api.ARTICLE_API.category_list,
+						data: {
+							type: 0,
+							status: 0,
+						},
+					})
+					.then((res) => {
+						if(res.error_code == CONSTS.ERROR_CODE.SUCCESS) {
+//							this.articleList = res.result_data;
+//							this.articleList.map((item) => {
+//								if(item.classify) {
+//									item.classify = utils.markSplit(item.classify);
+//								}
+//								item.create_time = dateFormat.diffTime(item.create_time * 1000);
+//							});
+						} else {
+							console.log("服务器异常");
+						}
+					})
+					.catch((err) => {
+						console.log("失误：" + err);
+					});
+			},
 		},
 		mounted() {
 			document.title = "时刻点官网";
 			this.get();
+			this.getCategory()
 			this.nav = [];
 			var index = {
 				path: "/index",
