@@ -172,7 +172,7 @@ export default {
     },
   },
   mounted() {
-    this.getArticle();
+//  this.getArticle();
     this.$nextTick(() => {
       coldTag.winOnload();
     });

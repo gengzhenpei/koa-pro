@@ -8,15 +8,37 @@ var utils = require('./utils.js')
  */
 
 const auth = () => {
-	return async function(ctx, next) {
+	return async function (ctx, next) {
 		var access_token = ctx.header.access_token
+		console.log('access_token', access_token)
 		var app_name = ctx.header.app_name
 		// console.log(consts.ROUTER)
 		let errMeg = 'access_token不合法'
 		try {
+			let url = ctx.url.split('?')[0]
+			let whiteUrl = ['/article/v1/user_add', '/article/v1/user_add', '/article/v1/login',]
 			if (access_token) {
 				// access_token = utils.base64decode(access_token)
 				var user = jwt.verify(access_token, config.secretKey)
+				// if (app_name == 'DOS' && access_token) {
+				//白名单接口不需要验证
+				if (whiteUrl.indexOf(url) < 0) {
+					if (!user) {
+						// throw new exception.erroeException(consts.ERROR_CODE.NO_ACCESS_TOKEN)
+						ctx.body = {
+							error_code: consts.ERROR_CODE.UNAUTHORIZED_ACCESS,
+							error_message: 'token验证失败！',
+						}
+						return false;
+					}
+				}
+				next();
+			} else {
+				ctx.body = {
+					error_code: consts.ERROR_CODE.UNAUTHORIZED_ACCESS,
+					error_message: 'token不存在！',
+				}
+				return false;
 			}
 		} catch (err) {
 			if (err.name == 'TokenExpiredError') {
@@ -30,14 +52,7 @@ const auth = () => {
 		ctx.auth = {
 			...user
 		}
-		let url = ctx.url.split('?')[0]
-		let whiteUrl = ['/article/v1/user_add', '/article/v1/user_add']
-		//白名单接口不需要验证
-		if(whiteUrl.indexOf(url)<0) {
-			if(!user) {
-				throw new exception.erroeException(consts.ERROR_CODE.NO_ACCESS_TOKEN)
-			}
-		}
+
 		await next()
 	}
 }

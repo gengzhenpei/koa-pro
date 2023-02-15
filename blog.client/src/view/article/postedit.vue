@@ -264,8 +264,8 @@ export default {
         url: api.ARTICLE_API.article_add,
         data: {
           title: this.form.title,
-          type: 1,
-          status: 1,
+          type: 0,
+          status: 0,
           content: this.content,
           eemail: this.form.email,
           cover: this.imgUrl,

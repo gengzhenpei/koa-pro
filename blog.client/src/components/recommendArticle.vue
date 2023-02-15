@@ -109,7 +109,7 @@ export default {
     },
   },
   mounted() {
-    this.getArticle();
+//  this.getArticle();
   },
   components: {},
 };

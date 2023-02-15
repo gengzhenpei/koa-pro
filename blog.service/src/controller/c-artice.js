@@ -7,6 +7,7 @@ const exception = require('../utils/exception.js')
 const extend = require('../utils/extend.js');
 const logs = require('../config/logConf.js')
 const LogFile = logs.logFile(__dirname);
+var Sequelize = require('sequelize');
 
 /**
  *添加文章
@@ -153,24 +154,41 @@ const articleList = async ctx => {
 const articleUpdate = async ctx => {
 	let body = ctx.data
 	let time = Date.parse(new Date()) / 1000
+	console.log('time', time)
 	await Article.update({
-			...body,
-			update_time: time,
-		}, {
-			where: {
-				id: body.id
-			}
-		})
-		.then(su => {
-			// increment findOne返回后可以直接调用
+		number: body.number,
+		update_time: time,
+	}, {
+		where: {
+			id: body.id
+		}
+	}).then(su => {
+		// increment findOne返回后可以直接调用
+		var error_code = su[0] ? consts.ERROR_CODE.SUCCESS : consts.ERROR_CODE.INTERNAL_SERVER_ERROR;
+		var error_message = su[0] ? '更新完成' : '更新失败'
+		ctx.body = extend.resultData(error_code, error_message)
+	})
+	.catch(ex => {
+		throw new exception.erroeException(consts.ERROR_CODE.INTERNAL_SERVER_ERROR, sequelizeUtils.validation(ex))
+	})
+	// await Article.update({
+	// 		...body,
+	// 		update_time: time,
+	// 	}, {
+	// 		where: {
+	// 			id: body.id
+	// 		}
+	// 	})
+	// 	.then(su => {
+	// 		// increment findOne返回后可以直接调用
 			
-			var error_code = su[0] ? consts.ERROR_CODE.SUCCESS : consts.ERROR_CODE.INTERNAL_SERVER_ERROR;
-			var error_message = su[0] ? '更新完成' : '更新失败'
-			ctx.body = extend.resultData(error_code, error_message)
-		})
-		.catch(ex => {
-			throw new exception.erroeException(consts.ERROR_CODE.INTERNAL_SERVER_ERROR, sequelizeUtils.validation(ex))
-		})
+	// 		var error_code = su[0] ? consts.ERROR_CODE.SUCCESS : consts.ERROR_CODE.INTERNAL_SERVER_ERROR;
+	// 		var error_message = su[0] ? '更新完成' : '更新失败'
+	// 		ctx.body = extend.resultData(error_code, error_message)
+	// 	})
+	// 	.catch(ex => {
+	// 		throw new exception.erroeException(consts.ERROR_CODE.INTERNAL_SERVER_ERROR, sequelizeUtils.validation(ex))
+	// 	})
 }
 /**
  *删除文章
