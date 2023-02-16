@@ -1,11 +1,44 @@
 <template>
-  <div id="app">
-    <router-view></router-view>
-  </div>
+	<div id="app">
+		<router-view></router-view>
+	</div>
 </template>
 
 <script>
-export default {
-  name: 'app'
-}
+	export default {
+		name: 'app'
+	}
 </script>
+<style type="text/css">
+	/*全局变量*/
+	
+	:root {
+		--code-font: "Consolas", "Panic Sans", "Bitstream Vera Sans Mono", "Menlo", "Microsoft Yahei", monospace;
+		--box-background-color: #fff;
+		--box-background-alt-color: #f9f9f9;
+		--box-background-hover-color: #fafafa;
+		--box-foreground-color: #000;
+		--box-border-color: #e2e2e2;
+		--box-border-hover-color: #c0c0c0;
+		--box-border-focus-color: #a6a6b0;
+		--box-border-radius: 3px;
+		--box-padding: 10px;
+		--box-font-size: 14px;
+		--box-line-height: 120%;
+		--button-background-color: #f0f0f0;
+		--button-background-hover-color: #e0e0e0;
+		--button-foreground-color: #666;
+		--button-foreground-hover-color: #333;
+		--button-border-color: #ddd;
+		--button-border-hover-color: #c0c0c0;
+		--menu-shadow-color: rgba(0, 0, 0, 0.2);
+		--ads-list-foreground-color: #445;
+		--component-margin: 20px;
+		--link-color: #778087;
+		--link-visited-color: #afb9c1;
+		--link-hover-color: #4d5256;
+		--color-foreground: #000;
+		--color-gray: #999;
+		--color-fade: #ccc;
+	}
+</style>

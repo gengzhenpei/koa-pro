@@ -1,34 +1,109 @@
 <template>
-	<div>
-		<div class="skd-body">
-			<div class="article ba" v-for="(item, index) in articleList">
-				<div class="articleLeft">
-					<a @click="getArticle(item)">
-						<img v-lazy="imgUrl + item.cover" />
-					</a>
+	<div style="display: flex;">
+		<div id="Main" class="">
+			<div class="box">
+				<div class="inner" id="Tabs">
+					<a v-for="(item,index) in category_list" href="/?tab=tech" class="tab">{{item.name}}</a>
+					<!--<a href="/?tab=creative" class="tab_current">创意</a>-->
 				</div>
-				<div class="articleMain">
-					<h2 class="skd-ellipsis">
-            			<a @click="getArticle(item)">{{ item.title }}</a>
-          			</h2>
-					<div class="articleConten">
-						<p>{{ item.summary }}</p>
+				<div v-for="(item, index) in articleList" class="cell item" style="">
+					<table cellpadding="0" cellspacing="0" border="0" width="100%">
+						<tbody>
+							<tr>
+								<td width="48" valign="top" align="center">
+									<a href="/member/kekeyao">
+										<img v-lazy="item.cover" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="kekeyao">
+									</a>
+								</td>
+								<td width="10"></td>
+								<td width="auto" valign="middle">
+									<span class="item_title"><a href="/t/916550#reply35" class="topic-link">{{ item.title }}</a></span>
+									<div class="sep5"></div>
+									<span class="topic_info">
+										<div class="votes"></div>
+										<a class="node" href="/go/create">分享创造</a> &nbsp;•&nbsp; 
+										<strong><a href="/member/kekeyao">kekeyao</a></strong> 
+										&nbsp;•&nbsp; <span title="2023-02-16 20:43:56 +08:00">47 分钟前</span> &nbsp;•&nbsp; 最后回复来自 
+										<strong><a href="/member/cnsdytedison">cnsdytedison</a></strong>
+									</span>
+								</td>
+								<td width="70" align="right" valign="middle">
+									<a href="/t/916550#reply35" class="count_livid">35</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<re-a></re-a>
+			</div>
+		</div>
+		<!--右边-->
+		<div id="Rightbar" class="">
+			<div class="box">
+				<div class="cell">
+					<table cellpadding="0" cellspacing="0" border="0" width="100%">
+						<tbody>
+							<tr>
+								<td width="48" valign="top">
+									<a href="/member/gengzhenpei"><img src="https://cdn.v2ex.com/avatar/54c4/4164/526939_large.png?m=1676467824" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="gengzhenpei"></a>
+								</td>
+								<td width="10" valign="top"></td>
+								<td width="auto" align="left">
+									<div class="fr">
+										<a href="/settings/night/toggle?once=80985" class="light-toggle"><img src="/static/img/toggle-light.png" align="absmiddle" height="10" alt="Light"></a>
+									</div><span class="bigger"><a href="/member/gengzhenpei">gengzhenpei</a></span>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="sep10"></div>
+					<table cellpadding="0" cellspacing="0" border="0" width="100%">
+						<tbody>
+							<tr>
+								<td width="33%" align="center">
+									<a href="/my/nodes" class="dark" style="display: block;"><span class="bigger">1</span>
+										<div class="sep3"></div><span class="fade">节点收藏</span></a>
+								</td>
+								<td width="34%" style="border-left: 1px solid rgba(100, 100, 100, 0.4); border-right: 1px solid rgba(100, 100, 100, 0.4);" align="center">
+									<a href="/my/topics" class="dark" style="display: block;"><span class="bigger">0</span>
+										<div class="sep3"></div><span class="fade">主题收藏</span></a>
+								</td>
+								<td width="33%" align="center">
+									<a href="/my/following" class="dark" style="display: block;"><span class="bigger">0</span>
+										<div class="sep3"></div><span class="fade">特别关注</span></a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="cell" id="member-activity">
+					<div class="member-activity-bar">
+						<div class="member-activity-start" style="width: 0%;"></div>
 					</div>
 				</div>
-				<div class="foot skd-ellipsis">
-					<span> 阅读量：{{ item.number }} </span>
-					<span>{{ item.create_time }}</span>
-					<span v-if="item.classify">分类：</span>
-					<template v-for="items in item.classify">
-						<Tag checked color="green" v-if="item.classify">{{ items }}</Tag>
-					</template>
+				<div class="cell" style="padding: 8px; line-height: 100%;">
+					<table cellpadding="0" cellspacing="0" border="0" width="100%">
+						<tbody>
+							<tr>
+								<td width="28">
+									<a href="/write"><img src="/static/img/essentials/compose.png?v=b9e1f045f4ad639733bf9f6dbc62ed4c" width="28" border="0" style="vertical-align: bottom;"></a>
+								</td>
+								<td width="10"></td>
+								<td width="auto" valign="middle" align="left">
+									<a href="/write">创作新主题</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="cell flex-one-row" style="padding: 7px 10px;">
+					<a href="/notifications" class="fade">0 条未读提醒</a>
+					<div id="money">
+						<a href="/balance" class="balance_area" style="">18 <img src="/static/img/silver@2x.png" height="16" alt="S" border="0"> 70 <img src="/static/img/bronze@2x.png" height="16" alt="B" border="0"></a>
+					</div>
 				</div>
 			</div>
-			<re-a></re-a>
 		</div>
-		<keep-alive>
-			<vmenu class="skd-recommend-lsit"></vmenu>
-		</keep-alive>
 	</div>
 </template>
 <script>
@@ -45,6 +120,7 @@
 		data() {
 			return {
 				articleList: [],
+				category_list: [],
 				imgUrl: api.IMGURL,
 				nav: path.currentPath,
 			};
@@ -93,13 +169,7 @@
 					})
 					.then((res) => {
 						if(res.error_code == CONSTS.ERROR_CODE.SUCCESS) {
-//							this.articleList = res.result_data;
-//							this.articleList.map((item) => {
-//								if(item.classify) {
-//									item.classify = utils.markSplit(item.classify);
-//								}
-//								item.create_time = dateFormat.diffTime(item.create_time * 1000);
-//							});
+							this.category_list = res.result_data;
 						} else {
 							console.log("服务器异常");
 						}
@@ -131,6 +201,52 @@
 </script>
 
 <style scoped>
+	.box {
+		background-color: var(--box-background-color);
+		border-radius: var(--box-border-radius);
+		box-shadow: 0 2px 3px rgb(0 0 0 / 10%);
+		border-bottom: 1px solid var(--box-border-color);
+	}
+	
+	#Tabs {
+		background-color: var(--box-background-color);
+		border-top-left-radius: 3px;
+		border-top-right-radius: 3px;
+	}
+	
+	.inner {
+		padding: 10px;
+		font-size: 14px;
+		line-height: 150%;
+		text-align: left;
+	}
+	
+	a.tab:active,
+	a.tab:link,
+	a.tab:visited {
+		display: inline-block;
+		font-size: 14px;
+		line-height: 14px;
+		padding: 5px 8px;
+		margin-right: 5px;
+		border-radius: var(--box-border-radius);
+		color: #555;
+		-webkit-tap-highlight-color: transparent;
+	}
+	
+	a.tab_current:active,
+	a.tab_current:link,
+	a.tab_current:visited {
+		display: inline-block;
+		font-size: 14px;
+		line-height: 14px;
+		padding: 5px 8px;
+		margin-right: 5px;
+		border-radius: 3px;
+		background-color: #334;
+		color: #fff;
+	}
+	
 	.article {
 		height: 200px;
 		padding: 20px;
@@ -191,5 +307,139 @@
 		float: right;
 		margin-top: -42px;
 		margin-right: 5px;
+	}
+</style>
+<style scoped>
+	#Main {
+		width: auto;
+		margin: 0 20px 20px 20px;
+	}
+	
+	#Rightbar {
+		width: 270px;
+		float: right;
+		margin-right: 20px;
+	}
+	
+	.item {
+		background-position: 0 bottom;
+		background-repeat: repeat-x;
+	}
+	
+	.cell {
+		padding: 10px;
+		font-size: 14px;
+		line-height: 150%;
+		text-align: left;
+		border-bottom: 1px solid var(--box-border-color);
+	}
+	
+	.item_title {
+		font-size: 16px;
+		line-height: 130%;
+		word-break: break-word;
+		line-break: strict;
+	}
+	
+	a.topic-link:active,
+	a.topic-link:link {
+		color: var(--link-color);
+		text-decoration: none;
+		word-break: break-word;
+	}
+	
+	.sep5 {
+		height: 5px;
+	}
+	
+	.topic_info {
+		font-size: 12px;
+		color: var(--color-fade);
+		line-height: 200%;
+	}
+	
+	.votes {
+		display: inline-block;
+	}
+	
+	a.node:active,
+	a.node:link,
+	a.node:visited {
+		background-color: #f5f5f5;
+		font-size: 12px;
+		line-height: 12px;
+		display: inline-block;
+		padding: 4px;
+		-moz-border-radius: 2px;
+		-webkit-border-radius: 2px;
+		border-radius: 2px;
+		text-decoration: none;
+		color: var(--color-gray);
+	}
+	
+	a.count_livid:active,
+	a.count_livid:link {
+		line-height: 12px;
+		font-weight: 700;
+		color: #fff;
+		background-color: #aab0c6;
+		display: inline-block;
+		padding: 2px 10px;
+		-moz-border-radius: 12px;
+		-webkit-border-radius: 12px;
+		border-radius: 12px;
+		text-decoration: none;
+		margin-right: 5px;
+		word-break: break-all;
+	}
+	
+	.sep10 {
+		height: 10px;
+	}
+	
+	.bigger {
+		font-size: 16px;
+	}
+	
+	.sep3 {
+		height: 3px;
+	}
+	
+	.fade {
+		color: var(--color-fade);
+	}
+	
+	.member-activity-bar {
+		width: 250px;
+		background-color: #f0f0f0;
+		height: 3px;
+	}
+	
+	.member-activity-start {
+		height: 3px;
+		background-color: #ccc;
+	}
+	
+	.balance_area,
+	a.balance_area:link,
+	a.balance_area:visited {
+		font-size: 11px;
+		line-height: 16px;
+		padding: 5px 10px;
+		border-radius: 20px;
+		text-decoration: none;
+		color: #666;
+		text-shadow: 0 1px 0 #fff;
+		display: inline-block;
+		background: #f5f5f5;
+		background: linear-gradient(top, #f5f5f5 0, #e2e2e2 100%);
+	}
+	
+	a:active,
+	a:link,
+	a:visited {
+		color: var(--link-color);
+		text-decoration: none;
+		word-break: break-word;
 	}
 </style>

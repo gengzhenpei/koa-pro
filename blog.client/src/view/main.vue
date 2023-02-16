@@ -1,56 +1,34 @@
 <template>
-  <div class="layout">
-    <Layout>
-      <Header>
-        <Menu mode="horizontal" theme="dark" active-name="1">
-          <div class="layout-logo" @click="routeTo('/')">
-            <img class="logo" src="../static/img/logo.png" />
-            <span class="index-logo">时刻点</span>
-          </div>
-          <div class="layout-nav" ref="me">
-            <ul>
-              <li
-                v-for="(item, index) in menuItem"
-                id="ulMe"
-                :class="$route.path == item.url ? selectedMenu : itemMenu"
-                @click="routeTo(item.url)"
-              >
-                <Icon :type="item.icon"></Icon>{{ item.text }}
-              </li>
-              <Dropdown>
-                <Button type="text" icon="ios-paper" class="skd-dropdown">
+	<div class="layout">
+		<Layout>
+			<Header>
+				<Menu mode="horizontal" theme="dark" active-name="1">
+					<div class="layout-logo" @click="routeTo('/')">
+						<img class="logo" src="../static/img/logo.png" />
+						<span class="index-logo">时刻点</span>
+					</div>
+					<div class="layout-nav" ref="me">
+						<ul>
+							<li v-for="(item, index) in menuItem" id="ulMe" :class="$route.path == item.url ? selectedMenu : itemMenu" @click="routeTo(item.url)">
+								<Icon :type="item.icon"></Icon>{{ item.text }}
+							</li>
+							<Dropdown>
+								<Button type="text" icon="ios-paper" class="skd-dropdown">
                   X实验室
                   <Icon type="arrow-down-b"></Icon>
                 </Button>
-                <template v-for="item in downMenu">
-                  <DropdownMenu slot="list">
-                    <DropdownItem @click.native="routeTo(item.url)">{{
-                      item.text
-                    }}</DropdownItem>
-                  </DropdownMenu>
-                </template>
-              </Dropdown>
-              <div class="writing">
-                <Input
-                  v-model="keyword"
-                  :maxlength="50"
-                  class="search"
-                  size="large"
-                  @on-enter="search(keyword)"
-                >
-                  <Button
-                    slot="append"
-                    icon="ios-search"
-                    @click.native="search(keyword)"
-                  ></Button>
-                </Input>
-                <Button
-                  type="error"
-                  class="font-16"
-                  style="margin-left: 150px"
-                  icon="edit"
-                  @click.native="routeTo('/postedit')"
-                  >发表文章</Button
+								<template v-for="item in downMenu">
+									<DropdownMenu slot="list">
+										<DropdownItem @click.native="routeTo(item.url)">{{ item.text }}
+										</DropdownItem>
+									</DropdownMenu>
+								</template>
+							</Dropdown>
+							<div class="writing">
+								<Input v-model="keyword" :maxlength="50" class="search" size="large" @on-enter="search(keyword)">
+								<Button slot="append" icon="ios-search" @click.native="search(keyword)"></Button>
+								</Input>
+								<Button type="error" class="font-16" style="margin-left: 150px" icon="edit" @click.native="routeTo('/postedit')">发表文章</Button
                 >
               </div>
             </ul>
@@ -185,6 +163,7 @@ export default {
   },
 };
 </script>
+
 <style>
 .ivu-layout-header {
   padding: 0 20px;
@@ -294,4 +273,11 @@ export default {
   width: 100% !important;
   position: fixed;
 }
+</style>
+<style scoped>
+	.content {
+		min-width: 600px;
+    max-width: 1100px;
+    margin: 0 auto;
+	}
 </style>
