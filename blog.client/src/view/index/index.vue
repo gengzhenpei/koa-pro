@@ -23,7 +23,7 @@
 										<div class="votes"></div>
 										<a class="node" href="/go/create">分享创造</a> &nbsp;•&nbsp; 
 										<strong><a href="/member/kekeyao">kekeyao</a></strong> 
-										&nbsp;•&nbsp; <span title="2023-02-16 20:43:56 +08:00">47 分钟前</span> &nbsp;•&nbsp; 最后回复来自 
+										&nbsp;•&nbsp; <span title="2023-02-16 20:43:56 +08:00">{{item.create_time}}</span> &nbsp;•&nbsp; 最后回复来自 
 										<strong><a href="/member/cnsdytedison">cnsdytedison</a></strong>
 									</span>
 								</td>
@@ -115,20 +115,60 @@
 	import path from "../../common/navData.js";
 	import reA from "../../components/recommendArticle.vue";
 	import utils from "../../common/utils";
-
+	import {
+		getArticle,
+	} from '@/api/article.js'
 	export default {
+		components: {
+			Vmenu,
+			reA,
+		},
 		data() {
 			return {
 				articleList: [],
 				category_list: [],
 				imgUrl: api.IMGURL,
 				nav: path.currentPath,
+				query: {
+					page: 1,
+					page_size: 10,
+					category_id: '',
+					status: 0,
+					keyword: '',
+				}
 			};
 		},
+		mounted() {
+			document.title = "时刻点官网";
+//			this.get();
+			this.getArticleFun()
+//			this.getCategory()
+//			this.nav = [];
+//			var index = {
+//				path: "/index",
+//				name: "index",
+//				title: "首页",
+//			};
+//			this.nav.push(index);
+			//获取真实ip
+			//  	console.log(window.returnCitySN)
+		},
 		methods: {
-			getArticle(type) {
-				var url = "article/" + type.id;
-				this.$router.push(url);
+//			getArticle(type) {
+//				var url = "article/" + type.id;
+//				this.$router.push(url);
+//			},
+			async getArticleFun() {
+				const {
+					code,
+					error_code,
+					data,
+					msg
+				} = await getArticle(this.query)
+				if(code == 200) {
+				} else {
+					console.log("服务器异常");
+				}
 			},
 			get() {
 				console.log('get')
@@ -179,24 +219,7 @@
 					});
 			},
 		},
-		mounted() {
-			document.title = "时刻点官网";
-			this.get();
-			this.getCategory()
-			this.nav = [];
-			var index = {
-				path: "/index",
-				name: "index",
-				title: "首页",
-			};
-			this.nav.push(index);
-			//获取真实ip
-			//  	console.log(window.returnCitySN)
-		},
-		components: {
-			Vmenu,
-			reA,
-		},
+		
 	};
 </script>
 

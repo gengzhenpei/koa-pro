@@ -3,6 +3,8 @@ const consts = require('../utils/consts.js');
 const sequelizeUtils = require('../utils/sequelizeUtils.js')
 const utils = require('../utils/utils.js')
 const Article = require('../models').Article
+const User = require('../models').User
+
 const exception = require('../utils/exception.js')
 const extend = require('../utils/extend.js');
 const logs = require('../config/logConf.js')
@@ -15,8 +17,10 @@ var Sequelize = require('sequelize');
 const articleAdd = async ctx => {
 	let body = ctx.data
 	let time = Date.parse(new Date()) / 1000
+	console.log('ctx', ctx)
 	await Article.create({
 			...body,
+			user_id: ctx.auth.user.id, //从上下文中取用户id
 			create_time: time,
 			update_time: time,
 		})
@@ -126,6 +130,9 @@ const articleList = async ctx => {
 		order = order_key
 	}
 	await Article.findAndCountAll({
+		include: [{
+			model: User,
+		}],
 			where,
 			order: [
 				...order

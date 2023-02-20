@@ -16,6 +16,10 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.INTEGER(11),
 			allowNull: true
 		},
+		sort: {
+			type: DataTypes.INTEGER(4),
+			allowNull: true
+		},
 		create_time: {
 			type: DataTypes.STRING(20),
 			allowNull: true

@@ -1,7 +1,7 @@
 /* jshint indent: 1 */
 
 module.exports = function(sequelize, DataTypes) {
-	return sequelize.define('skd_article', {
+	const Article = sequelize.define('skd_article', {
 		id: {
 			type: DataTypes.INTEGER(11),
 			allowNull: false,
@@ -11,6 +11,15 @@ module.exports = function(sequelize, DataTypes) {
 		user_ip: {
 			type: DataTypes.STRING(20),
 			allowNull: true
+		},
+		user_id: {
+			type: DataTypes.INTEGER(11),
+			allowNull: true
+		},
+		category_id: {
+			type: DataTypes.INTEGER(11),
+			allowNull: true,
+			defaultValue: null
 		},
 		email: {
 			type: DataTypes.STRING(30),
@@ -68,4 +77,8 @@ module.exports = function(sequelize, DataTypes) {
 		tableName: 'skd_article',
 		timestamps: false
 	});
+	Article.associate = (models) => {
+		Article.belongsTo(models.User, {foreignKey: "user_id" })
+	}
+	return Article;
 };

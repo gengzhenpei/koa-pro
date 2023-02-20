@@ -48,8 +48,8 @@ export default new Router({
 					component: resolve => require(['../view/search/search.vue'], resolve)
 				},
 				{
-					path: '/signup',
-					component: resolve => require(['../view/login/signup.vue'], resolve)
+					path: '/register',
+					component: resolve => require(['../view/login/register.vue'], resolve)
 				},
 				{
 					path: '/login',

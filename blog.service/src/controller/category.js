@@ -1,4 +1,5 @@
 const Category = require('../models').Category
+const consts = require('../utils/consts.js');
 const exception = require('../utils/exception.js')
 const extend = require('../utils/extend.js');
 const logs = require('../config/logConf.js')
@@ -18,7 +19,8 @@ const LogFile = logs.logFile(__dirname);
 		})
 		.catch(ex => {
 			LogFile.error(ex)
-			throw new exception.erroeException(consts.ERROR_CODE.INTERNAL_SERVER_ERROR, sequelizeUtils.validation(ex))
+			// throw new exception.erroeException(consts.ERROR_CODE.INTERNAL_SERVER_ERROR, sequelizeUtils.validation(ex))
+			ctx.body = extend.resultData(consts.ERROR_CODE.INTERNAL_SERVER_ERROR)
 		})
 }
 

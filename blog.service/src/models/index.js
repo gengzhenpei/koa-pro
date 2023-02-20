@@ -50,5 +50,7 @@ module.exports = {
 	Star: require('./skd_star.js')(sequelize, Sequelize), 
 	MysqlSessionStore: require('./_mysql_session_store.js')(sequelize, Sequelize),
 	Category: require('./category.js')(sequelize, Sequelize),
+	User: require('./user.js')(sequelize, Sequelize),
+
 
 }

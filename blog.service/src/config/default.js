@@ -10,7 +10,7 @@ const devConfig = {
 	database: {
 		DATABASE: 'skd',
 		USERNAME: 'root',
-		PASSWORD: 'root',
+		PASSWORD: '000000',
 		PORT: '3306',
 		HOST: '127.0.0.1'
 	},
