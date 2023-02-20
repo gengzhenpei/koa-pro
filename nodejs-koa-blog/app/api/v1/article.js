@@ -46,7 +46,7 @@ router.post('/article', new Auth(AUTH_ADMIN).m, async (ctx) => {
 
   // 通过验证器校验参数是否通过
   const v = await new ArticleValidator().validate(ctx);
-
+  console.log('v', v)
   // 创建文章
   const [err, data] = await ArticleDao.create(v);
   if (!err) {

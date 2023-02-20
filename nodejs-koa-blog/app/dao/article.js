@@ -35,7 +35,7 @@ class ArticleDao {
     article.seo_keyword = v.get('body.seo_keyword');
     article.status = v.get('body.status') || 1;
     article.sort_order = v.get('body.sort_order');
-    article.admin_id = v.get('body.admin_id');
+    article.admin_id = v.auth.user.id;
     article.category_id = v.get('body.category_id');
 
     try {

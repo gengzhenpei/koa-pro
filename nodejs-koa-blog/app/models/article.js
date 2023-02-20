@@ -21,12 +21,12 @@ Article.init({
   },
   description: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
     comment: '文章简介'
   },
   img_url: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
     comment: '文章封面图'
   },
   content: {
@@ -36,7 +36,7 @@ Article.init({
   },
   seo_keyword: {
     type: DataTypes.STRING(128),
-    allowNull: false,
+    allowNull: true,
     comment: '文章SEO关键字'
   },
   status: {
