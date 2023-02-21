@@ -33,7 +33,6 @@ class Auth {
         if (error.name === 'TokenExpiredError') {
           errMsg = "token已过期"
         }
-
         throw new global.errs.Forbidden(errMsg);
       }
       if (decode.scope < this.level) {
@@ -41,6 +40,7 @@ class Auth {
         throw new global.errs.Forbidden(errMsg);
       }
       ctx.request.body.uid = decode.uid
+      console.log('ctx.request.body.uid', ctx.request.body.uid)
       ctx.auth = {
         uid: decode.uid,
         scope: decode.scope

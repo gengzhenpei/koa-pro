@@ -6,6 +6,22 @@
 					<a v-for="(item,index) in category_list" :href="'/?tab='+item.id" :class="{'tab_current': cur_category_id==item.id}" class="tab">{{item.name}}</a>
 					<!--<a href="/?tab=creative" class="tab_current">创意</a>-->
 				</div>
+				<div class="cell" id="SecondaryTabs">
+					<div class="">
+
+						<a href="/go/all4all">二手交易</a> &nbsp; &nbsp;
+						<a href="/go/exchange">物物交换</a> &nbsp; &nbsp;
+						<a href="/go/free">免费赠送</a> &nbsp; &nbsp;
+						<a href="/go/dn">域名</a> &nbsp; &nbsp;
+						<a href="/go/tuan">团购</a> &nbsp; &nbsp;
+						<a href="/t/68631">安全提示</a>
+					</div>
+					<div class="fr">
+						<a href="/new/free">我要送东西</a> &nbsp; &nbsp;
+						<a href="/new/exchange">我要换东西</a> &nbsp; &nbsp;
+						<a href="/new/all4all">我要出二手</a>
+					</div>
+				</div>
 				<div v-for="(item, index) in articleList" class="cell item" style="">
 					<table cellpadding="0" cellspacing="0" border="0" width="100%">
 						<tbody>
@@ -22,7 +38,7 @@
 									<span class="topic_info">
 										<div class="votes"></div>
 										<a class="node" href="/go/create">分享创造</a> &nbsp;•&nbsp; 
-										<strong><a href="/member/kekeyao">kekeyao</a></strong> 
+										<strong><a href="/member/kekeyao">{{item.user_info.username}}</a></strong> 
 										&nbsp;•&nbsp; <span title="2023-02-16 20:43:56 +08:00">{{item.create_time}}</span> &nbsp;•&nbsp; 最后回复来自
 									<strong><a href="/member/cnsdytedison">cnsdytedison</a></strong>
 									</span>
@@ -459,5 +475,12 @@
 		border-radius: 3px;
 		background-color: #334;
 		color: #fff;
+	}
+	
+	#SecondaryTabs {
+		background-color: var(--box-background-alt-color);
+		padding: 10px 10px 10px 20px;
+		display: flex;
+		justify-content: space-between;
 	}
 </style>

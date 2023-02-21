@@ -8,14 +8,14 @@ const { Auth } = require('@middlewares/auth');
 const { Resolve } = require('@lib/helper');
 const res = new Resolve();
 
-const AUTH_ADMIN = 16;
+const AUTH_ADMIN = 7;
 
 const router = new Router({
   prefix: '/api/v1'
 })
 
 // 创建评论
-router.post('/comment', async (ctx) => {
+router.post('/comment', new Auth(AUTH_ADMIN).m, async (ctx) => {
   // 通过验证器校验参数是否通过
   const v = await new CommentValidator().validate(ctx);
   const [err, data] = await CommentDao.create(v);

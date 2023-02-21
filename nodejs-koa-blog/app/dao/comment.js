@@ -11,9 +11,10 @@ const { Sequelize, Op } = require('sequelize')
 class CommentDao {
   // 创建评论
   static async create(v) {
+    console.log("v.get('body.uid')", v.get('body.uid'))
     const comment = new Comment();
     comment.article_id = v.get('body.article_id');
-    comment.user_id = v.get('body.user_id');
+    comment.user_id = v.get('body.uid');
     comment.email = v.get('body.email') || 0;
     comment.content = xss(v.get('body.content'));
 

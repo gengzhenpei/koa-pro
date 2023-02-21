@@ -65,6 +65,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
 	response => {
 		const res = response.data
+		console.log("response", response)
 		if(res.code !== 200) {
 			// 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
 			if(res.error_code === 10006 || res.code === 50012 || res.code === 50014) {
@@ -77,7 +78,8 @@ service.interceptors.response.use(
 		}
 	},
 	error => {
-		console.log('err' + error) // for debug
+		console.log('err:' + error) // for debug
+		location.href = '/login'
 		return Promise.reject(error)
 	}
 )

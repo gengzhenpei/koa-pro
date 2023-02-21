@@ -41,4 +41,94 @@
 		--color-gray: #999;
 		--color-fade: #ccc;
 	}
+	
+	body {
+		min-width: 820px;
+		font-family: "Helvetica Neue", "Luxi Sans", "Segoe UI", "Hiragino Sans GB", "Microsoft Yahei", sans-serif, "Apple Logo";
+	}
+	/*公共样式*/
+	
+	.cell-translucent:first-child,
+	.cell:first-child,
+	.cell_ops:first-child {
+		border-top: none;
+		border-top-left-radius: var(--box-border-radius);
+		border-top-right-radius: var(--box-border-radius);
+	}
+	
+	.sep20 {
+		height: 20px;
+	}
+	
+	.cell {
+		padding: 10px;
+		font-size: 14px;
+		line-height: 150%;
+		text-align: left;
+		border-bottom: 1px solid var(--box-border-color);
+		display: flex;
+		justify-content: space-between;
+	}
+	
+	.tag:link,
+	.tag:visited {
+		padding: 5px 10px;
+		line-height: 100%;
+		background-color: #f0f0f0;
+		border-radius: 10px;
+		margin: 0 5px;
+		display: inline-block;
+	}
+	
+	a:active,
+	a:link,
+	a:visited {
+		color: var(--link-color);
+		text-decoration: none;
+		word-break: break-word;
+	}
+	
+	.gray {
+		color: var(--color-gray);
+	}
+	
+	.snow {
+		color: #e2e2e2;
+	}
+	
+	img.avatar {
+		-moz-border-radius: 4px;
+		border-radius: 4px;
+		vertical-align: bottom;
+	}
+	
+	.sep5 {
+		height: 5px;
+	}
+	
+	.sep3 {
+		height: 3px;
+	}
+	
+	.flex-one-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	
+	.flex-row-end {
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+	}
+	
+	form {
+		display: block;
+		margin-top: 0em;
+		width: 100%;
+	}
+	
+	.super {
+		padding: 4px 15px;
+	}
 </style>

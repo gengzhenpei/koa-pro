@@ -4,6 +4,8 @@ const { Article } = require('@models/article')
 const { Category } = require('@models/category')
 const { Comment } = require('@models/comment')
 const { Admin } = require('@models/admin')
+const { User } = require('@models/user')
+
 const { isArray, unique } = require('@lib/utils')
 
 // 定义文章模型
@@ -81,6 +83,45 @@ class ArticleDao {
       return [err, null]
     }
   }
+
+  
+  static async _handleUser(data, ids) {
+    const finner = {
+      where: {
+        id: {}
+      },
+      attributes: ['id', 'email', 'username']
+    }
+
+    if (isArray(ids)) {
+      finner.where.id = {
+        [Op.in]: ids
+      }
+    } else {
+      finner.where.id = ids
+    }
+
+    try {
+      if (isArray(ids)) {
+        const res = await User.findAll(finner)
+        let user = {}
+        res.forEach(item => {
+          user[item.id] = item
+        })
+
+        data.forEach(item => {
+          item.setDataValue('user_info', user[item.admin_id] || null)
+        })
+      } else {
+        const res = await User.findOne(finner)
+        data.setDataValue('user_info', res)
+      }
+      return [null, data]
+    } catch (err) {
+      return [err, null]
+    }
+  }
+
 
   static async _handleCategory(data, ids) {
     const finner = {
@@ -165,7 +206,8 @@ class ArticleDao {
 
       // 处理创建人
       const adminIds = unique(rows.map(item => item.admin_id))
-      const [userError, dataAndAdmin] = await ArticleDao._handleAdmin(rows, adminIds)
+      const [userError, dataAndAdmin] = await ArticleDao._handleUser(rows, adminIds)
+
       if (!userError) {
         rows = dataAndAdmin
       }
@@ -282,11 +324,10 @@ class ArticleDao {
       }
 
       // 处理创建人
-      const [userError, dataAndAdmin] = await ArticleDao._handleAdmin(article, article.admin_id)
+      const [userError, dataAndAdmin] = await ArticleDao._handleUser(article, article.admin_id)
       if (!userError) {
         article = dataAndAdmin
       }
-
 
       if (!article) {
         throw new global.errs.NotFound('没有找到相关文章');
