@@ -39,7 +39,7 @@ const findMembers = function (instance, {
   return _find(instance)
 }
 
-// 颁布令牌
+// 颁布令牌 这里token里用户的id
 const generateToken = function (uid, scope) {
   const secretKey = global.config.security.secretKey;
   const expiresIn = global.config.security.expiresIn;

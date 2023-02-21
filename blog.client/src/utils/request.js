@@ -33,13 +33,12 @@ const service = axios.create({
  */
 service.interceptors.request.use(
 	(config) => {
-		console.log('config', config)
 		// 不规范写法 可根据setting.config.js tokenName配置随意自定义headers
 		// if (token) config.headers[tokenName] = token
 		const token = localStorage.getItem('token');
 		const base64 = Base64.encode(`${token}:`)
 		// 规范写法 不可随意自定义
-		if(token) config.headers['Authorization'] = `Basic ${base64}` 
+		if(token) config.headers['Authorization'] = `Basic ${base64}`
 
 		if(
 			config.data &&
@@ -48,9 +47,13 @@ service.interceptors.request.use(
 		) {
 			config.data = qs.stringify(config.data);
 		}
-		if(config.method == 'get') {
-			config.params = qs.stringify(config.params);
-			console.log('config.params', config.params)
+		if((config.method == 'get') && config.params) {
+			//			config.params = qs.stringify(config.params);
+			config.paramsSerializer = params => {
+				return qs.stringify(config.params, {
+					indices: false
+				})
+			};
 		}
 		return config
 	},
@@ -61,23 +64,10 @@ service.interceptors.request.use(
 // respone拦截器
 service.interceptors.response.use(
 	response => {
-		/**
-		 * code为非20000是抛错 可结合自己业务进行修改
-		 */
 		const res = response.data
 		if(res.code !== 200) {
-			//			Message({
-			//				message: res.message,
-			//				type: 'error',
-			//				duration: 5 * 1000
-			//			})
-			//			Notification({
-			//				message: res.message,
-			//				type: 'error',
-			//				duration: 1500
-			//			});
 			// 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
-			if(res.error_code === 61025 || res.code === 50012 || res.code === 50014) {
+			if(res.error_code === 10006 || res.code === 50012 || res.code === 50014) {
 				console.log('你已被登出，可以取消继续留在该页面，或者重新登录')
 				window.location.href = '/login'
 			}
@@ -91,5 +81,47 @@ service.interceptors.response.use(
 		return Promise.reject(error)
 	}
 )
+const handleData = ({
+	config,
+	data,
+	status,
+	statusText
+}) => {
+	switch(status) {
+		//修改学工号失败 状态码单独处理
+		case 9:
+			return data
+			break;
+		case 1:
+			break;
+		case 200:
+			return data
+		case 401:
+			break
+		case 403:
+			break
+	}
+	return Promise.reject(data)
+}
+/**
+ * @description axios响应拦截器
+ */
+//service.interceptors.response.use(
+//	(response) => {
+//		handleData(response);
+//	},
+//	(error) => {
+//		const {
+//			response
+//		} = error
+//		if(response === undefined) {
+//			Vue.prototype.$baseMessage(
+//				'未可知错误，大部分是由于后端不支持跨域CORS或无效配置引起',
+//				'error'
+//			)
+//			return {}
+//		} else return handleData(response)
+//	}
+//)
 
 export default service

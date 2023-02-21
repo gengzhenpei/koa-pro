@@ -24,10 +24,8 @@ class ArticleDao {
     if (hasArticle) {
       throw new global.errs.Existing('文章已存在');
     }
-
     // 创建文章
     const article = new Article();
-
     article.title = title;
     article.description = v.get('body.description');
     article.img_url = v.get('body.img_url');
@@ -35,9 +33,9 @@ class ArticleDao {
     article.seo_keyword = v.get('body.seo_keyword');
     article.status = v.get('body.status') || 1;
     article.sort_order = v.get('body.sort_order');
-    article.admin_id = v.auth.user.id;
+    article.admin_id = v.get('body.uid');
     article.category_id = v.get('body.category_id');
-
+    
     try {
       const res = await article.save();
       return [null, res]
@@ -148,8 +146,8 @@ class ArticleDao {
 
     try {
       const article = await Article.scope('iv').findAndCountAll({
-        limit: page_size, //每页10条
-        offset: (page - 1) * page_size,
+        limit: Number(page_size), //每页10条
+        offset: (page - 1) * Number(page_size),
         where: filter,
         order: [
           ['created_at', 'DESC']
@@ -267,6 +265,7 @@ class ArticleDao {
   // 文章详情
   static async detail(id, query) {
     const { keyword } = query
+    console.log('detail-id', id)
     try {
       let filter = {
         id,

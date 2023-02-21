@@ -45,38 +45,57 @@
 	import 'quill/dist/quill.core.css'
 	import 'quill/dist/quill.snow.css'
 	import 'quill/dist/quill.bubble.css'
-
+	import {
+		detail,
+	} from '@/api/article.js'
 	export default {
+		components: {
+			reA,
+			Vmenu
+		},
 		data() {
 			return {
 				article: '',
 				nav: path.currentPath,
 			}
 		},
+		watch: {
+			$route() {
+				this.get();
+			}
+		},
+		mounted() {
+			this.Detail()
+			var index = {
+				path: "",
+				name: "index",
+				title: "文章详情"
+			}
+			this.nav.push(index)
+		},
+
 		methods: {
-			get() {
+			//详情
+			async Detail() {
 				var self = this;
-				axios({
-					method: 'get',
-					url: api.ARTICLE_API.article_select + '/' + self.$route.params.id
-				}).then(res => {
-					if(res.error_code == CONSTS.ERROR_CODE.SUCCESS) {
-						self.article = res.result_data;
-						document.title = res.result_data.title || '404从你的全世界路过！';
-						if(self.article.classify) {
-							self.article.classify = res.result_data.classify.split(',')
-						}
-						self.article.create_time = dateFormat.dateFormat(res.result_data.create_time * 1000, 'yyyy-MM-dd hh:mm:ss')
-						setTimeout(function() {
-							self.articleUpdate(self.article);
-						}, 4600)
-					} else {
-						self.$router.push("/404");
-						console.log("服务器异常")
+				const {
+					data,
+					code,
+					msg
+				} = await detail(this.$route.params.id)
+				if(code == 200) {
+					self.article = data;
+					document.title = data.title || '404从你的全世界路过！';
+					if(self.article.classify) {
+						self.article.classify = data.classify.split(',')
 					}
-				}).catch(err => {
-					console.log("失误：" + err);
-				})
+					self.article.create_time = dateFormat.dateFormat(data.create_time * 1000, 'yyyy-MM-dd hh:mm:ss')
+					setTimeout(function() {
+						self.articleUpdate(self.article);
+					}, 4600)
+				} else {
+					console.log("服务器异常");
+				}
 			},
 			articleUpdate(type) {
 				axios({
@@ -97,24 +116,7 @@
 				})
 			}
 		},
-		mounted() {
-			this.get()
-			var index = {
-				path: "",
-				name: "index",
-				title: "文章详情"
-			}
-			this.nav.push(index)
-		},
-		watch: {
-			$route() {
-				this.get();
-			}
-		},
-		components: {
-			reA,
-			Vmenu
-		}
+
 	}
 </script>
 

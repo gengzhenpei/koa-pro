@@ -11,7 +11,7 @@ const {resolve} = require('path')
 const koaStatic = require('koa-static')
 
 const catchError = require('./middlewares/exception')
-
+const logs = require('./config/logConf.js')
 const app = new Koa()
 
 app.use(koaStatic(__dirname + '/public'))

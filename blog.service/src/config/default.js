@@ -1,3 +1,5 @@
+const { Logger } = require("log4js")
+
 /* *
  *	连接配置，
  *	devConfig 开发环境
@@ -12,7 +14,7 @@ const devConfig = {
 		USERNAME: 'root',
 		PASSWORD: '000000',
 		PORT: '3306',
-		HOST: '127.0.0.1'
+		HOST: '127.0.0.1',
 	},
 	//上传文件目录，如图片为 UPLOAD + IMAGE
 	upload: {

@@ -127,8 +127,8 @@ class CategoryDao {
     try {
       const category = await Category.scope('bh').findAndCountAll({
         where: params,
-        limit: page_size, //每页10条
-        offset: (page - 1) * page_size,
+        limit: Number(page_size), //每页10条
+        offset: (page - 1) * Number(page_size),
         order: [
           ['created_at', 'DESC']
         ]

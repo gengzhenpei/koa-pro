@@ -36,17 +36,15 @@ class Auth {
 
         throw new global.errs.Forbidden(errMsg);
       }
-      console.log('decode', decode)
       if (decode.scope < this.level) {
         errMsg = "权限不足"
         throw new global.errs.Forbidden(errMsg);
       }
-
+      ctx.request.body.uid = decode.uid
       ctx.auth = {
         uid: decode.uid,
         scope: decode.scope
       }
-
       await next()
     }
   }

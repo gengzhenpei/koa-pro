@@ -77,8 +77,6 @@ module.exports = function(sequelize, DataTypes) {
 		tableName: 'skd_article',
 		timestamps: false
 	});
-	Article.associate = (models) => {
-		Article.belongsTo(models.User, {foreignKey: "user_id" })
-	}
+	
 	return Article;
 };

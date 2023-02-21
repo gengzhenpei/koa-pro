@@ -3,7 +3,7 @@
 		<div id="Main" class="">
 			<div class="box">
 				<div class="inner" id="Tabs">
-					<a v-for="(item,index) in category_list" href="/?tab=tech" class="tab">{{item.name}}</a>
+					<a v-for="(item,index) in category_list" :href="'/?tab='+item.id" :class="{'tab_current': cur_category_id==item.id}" class="tab">{{item.name}}</a>
 					<!--<a href="/?tab=creative" class="tab_current">创意</a>-->
 				</div>
 				<div v-for="(item, index) in articleList" class="cell item" style="">
@@ -16,15 +16,15 @@
 									</a>
 								</td>
 								<td width="10"></td>
-								<td width="auto" valign="middle">
-									<span class="item_title"><a href="/t/916550#reply35" class="topic-link">{{ item.title }}</a></span>
+								<td width="auto" valign="middle" style="width: 560px;">
+									<span class="item_title"><a :href="'/article/'+item.id" class="topic-link">{{ item.title }}</a></span>
 									<div class="sep5"></div>
 									<span class="topic_info">
 										<div class="votes"></div>
 										<a class="node" href="/go/create">分享创造</a> &nbsp;•&nbsp; 
 										<strong><a href="/member/kekeyao">kekeyao</a></strong> 
-										&nbsp;•&nbsp; <span title="2023-02-16 20:43:56 +08:00">{{item.create_time}}</span> &nbsp;•&nbsp; 最后回复来自 
-										<strong><a href="/member/cnsdytedison">cnsdytedison</a></strong>
+										&nbsp;•&nbsp; <span title="2023-02-16 20:43:56 +08:00">{{item.create_time}}</span> &nbsp;•&nbsp; 最后回复来自
+									<strong><a href="/member/cnsdytedison">cnsdytedison</a></strong>
 									</span>
 								</td>
 								<td width="70" align="right" valign="middle">
@@ -34,7 +34,7 @@
 						</tbody>
 					</table>
 				</div>
-				<re-a></re-a>
+				<!--<re-a></re-a>-->
 			</div>
 		</div>
 		<!--右边-->
@@ -118,6 +118,9 @@
 	import {
 		getArticle,
 	} from '@/api/article.js'
+	import {
+		getCategory,
+	} from '@/api/category.js'
 	export default {
 		components: {
 			Vmenu,
@@ -133,31 +136,59 @@
 					page: 1,
 					page_size: 10,
 					category_id: '',
-					status: 0,
+					status: 1,
 					keyword: '',
-				}
+				},
+				queryCategery: {
+					page: 1,
+					page_size: 10,
+					id: '',
+					status: 1,
+					name: '',
+				},
+				cur_category_id: '',
 			};
+		},
+		created() {
+			this.getData();
+			this.cur_category_id = this.$route.query.tab;
+			if(this.cur_category_id) {
+				this.query.category_id = this.cur_category_id;
+			}
 		},
 		mounted() {
 			document.title = "时刻点官网";
-//			this.get();
-			this.getArticleFun()
-//			this.getCategory()
-//			this.nav = [];
-//			var index = {
-//				path: "/index",
-//				name: "index",
-//				title: "首页",
-//			};
-//			this.nav.push(index);
+
+			this.nav = [];
+			var index = {
+				path: "/index",
+				name: "index",
+				title: "首页",
+			};
+			this.nav.push(index);
 			//获取真实ip
-			//  	console.log(window.returnCitySN)
+			console.log(window.returnCitySN)
 		},
 		methods: {
-//			getArticle(type) {
-//				var url = "article/" + type.id;
-//				this.$router.push(url);
-//			},
+			async getData() {
+				await this.getCategoryFun()
+				await this.getArticleFun()
+			},
+			async getCategoryFun() {
+				const {
+					code,
+					error_code,
+					data,
+					msg
+				} = await getCategory(this.queryCategery)
+				if(code == 200) {
+					this.category_list = data.data;
+					if(!this.query.category_id) {
+						this.cur_category_id = data.data[0].id;
+						this.query.category_id = this.cur_category_id;
+					}
+				}
+			},
 			async getArticleFun() {
 				const {
 					code,
@@ -166,60 +197,11 @@
 					msg
 				} = await getArticle(this.query)
 				if(code == 200) {
-				} else {
-					console.log("服务器异常");
+					this.articleList = data.data;
 				}
 			},
-			get() {
-				console.log('get')
-				axios({
-						method: "post",
-						url: api.ARTICLE_API.article_list,
-						data: {
-							type: 0,
-							status: 0,
-						},
-					})
-					.then((res) => {
-						if(res.error_code == CONSTS.ERROR_CODE.SUCCESS) {
-							this.articleList = res.result_data;
-							this.articleList.map((item) => {
-								if(item.classify) {
-									item.classify = utils.markSplit(item.classify);
-								}
-								item.create_time = dateFormat.diffTime(item.create_time * 1000);
-							});
-						} else {
-							console.log("服务器异常");
-						}
-					})
-					.catch((err) => {
-						console.log("失误：" + err);
-					});
-			},
-			getCategory() {
-				console.log('get')
-				axios({
-						method: "post",
-						url: api.ARTICLE_API.category_list,
-						data: {
-							type: 0,
-							status: 0,
-						},
-					})
-					.then((res) => {
-						if(res.error_code == CONSTS.ERROR_CODE.SUCCESS) {
-							this.category_list = res.result_data;
-						} else {
-							console.log("服务器异常");
-						}
-					})
-					.catch((err) => {
-						console.log("失误：" + err);
-					});
-			},
 		},
-		
+
 	};
 </script>
 
@@ -464,5 +446,18 @@
 		color: var(--link-color);
 		text-decoration: none;
 		word-break: break-word;
+	}
+	
+	a.tab_current:active,
+	a.tab_current:link,
+	a.tab_current:visited {
+		display: inline-block;
+		font-size: 14px;
+		line-height: 14px;
+		padding: 5px 8px;
+		margin-right: 5px;
+		border-radius: 3px;
+		background-color: #334;
+		color: #fff;
 	}
 </style>
