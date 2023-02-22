@@ -37,49 +37,8 @@
 					</div>
 				</div>
 				<div id="workspace" style="">
-					<textarea v-model="content" style="" maxlength="20000" id="editor" name="content"></textarea>
-					<!--<div class="CodeMirror cm-s-default CodeMirror-wrap">
-						<div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 4px; left: 105.062px;">
-							<textarea autocorrect="off" autocapitalize="off" spellcheck="false" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;" tabindex="2"></textarea>
-						</div>
-						<div class="CodeMirror-vscrollbar" cm-not-content="true">
-							<div style="min-width: 1px; height: 0px;"></div>
-						</div>
-						<div class="CodeMirror-hscrollbar" cm-not-content="true">
-							<div style="height: 100%; min-height: 1px; width: 0px;"></div>
-						</div>
-						<div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div>
-						<div class="CodeMirror-gutter-filler" cm-not-content="true"></div>
-						<div class="CodeMirror-scroll" tabindex="-1">
-							<div class="CodeMirror-sizer" style="margin-left: 30px; margin-bottom: -17px; border-right-width: 13px; min-height: 24px; padding-right: 0px; padding-bottom: 0px;">
-								<div style="position: relative; top: 0px;">
-									<div class="CodeMirror-lines">
-										<div style="position: relative; outline: none;">
-											<div class="CodeMirror-measure"><span><span>&#8203;</span>x</span>
-											</div>
-											<div class="CodeMirror-measure"></div>
-											<div style="position: relative; z-index: 1;"></div>
-											<div class="CodeMirror-cursors" style="">
-												<div class="CodeMirror-cursor" style="left: 75.0625px; top: 0px; height: 16px;">&nbsp;</div>
-											</div>
-											<div class="CodeMirror-code">
-												<div style="position: relative;">
-													<div class="CodeMirror-gutter-wrapper" style="left: -30px;">
-														<div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">1</div>
-													</div>
-													<pre class=" CodeMirror-line "><span style="padding-right: 0.1px;">发的啥地方</span></pre>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div style="position: absolute; height: 13px; width: 1px; border-bottom: 0px solid transparent; top: 24px;"></div>
-							<div class="CodeMirror-gutters" style="height: 37px;">
-								<div class="CodeMirror-gutter CodeMirror-linenumbers" style="width: 29px;"></div>
-							</div>
-						</div>
-					</div>-->
+					<!--<textarea v-model="content" style="" maxlength="20000" id="editor" name="content"></textarea>-->
+					<div class="editor"></div>
 				</div>
 				<div class="cell" style="display: flex; align-items: center;">
 					<div style="margin-right: 5px;">主题节点</div>
@@ -120,13 +79,8 @@
 </template>
 
 <script>
-	import { quillEditor } from "vue-quill-editor";
-	import "quill/dist/quill.core.css";
-	import "quill/dist/quill.snow.css";
-	import "quill/dist/quill.bubble.css";
-	import axios from "../../common/httpUtils";
-	import api from "../../api/index";
-	import CONSTS from "../../common/consts";
+	import Quill from 'quill'
+	import 'quill/dist/quill.snow.css'
 	import {
 		postArticle,
 	} from '@/api/article.js'
@@ -137,15 +91,64 @@
 		data() {
 			return {
 				content: "",
-				editorOption: {
+				options: {
+					theme: 'snow',
+					indexCursor: null,
+					lengthCursor: null,
+					quill: null,
+
 					modules: {
-						toolbar: "#toolbar",
+						toolbar: [
+							["bold", "italic", "underline", "strike"], // 加粗 斜体 下划线 删除线
+							["blockquote", "code-block"], // 引用  代码块
+							[{
+								header: 1
+							}, {
+								header: 2
+							}], // 1、2 级标题
+							[{
+								list: "ordered"
+							}, {
+								list: "bullet"
+							}], // 有序、无序列表
+							[{
+								script: "sub"
+							}, {
+								script: "super"
+							}], // 上标/下标
+							[{
+								indent: "-1"
+							}, {
+								indent: "+1"
+							}], // 缩进
+							[{
+								'direction': 'rtl'
+							}], // 文本方向
+							[{
+								size: ["small", false, "large", "huge"]
+							}], // 字体大小
+							[{
+								header: [1, 2, 3, 4, 5, 6, false]
+							}], // 标题
+							[{
+								color: []
+							}, {
+								background: []
+							}], // 字体颜色、字体背景颜色
+							[{
+								font: []
+							}], // 字体种类
+							[{
+								align: []
+							}], // 对齐方式
+							["clean"], // 清除文本格式
+							["link", "image", "video"] // 链接、图片、视频
+						], //工具菜单栏配置
 					},
-					placeholder: "请输入内容...",
+					placeholder: '请输入内容'
 				},
 				classify: "",
 				imgUrl: "",
-				url: api.UPLOAD_API.UPLOAD_AJXA,
 				showContent: false,
 				data2: [],
 				summary: "", //摘要
@@ -172,6 +175,7 @@
 		},
 		mounted() {
 			var self = this;
+			this.onEditorFocus();
 		},
 		created() {
 			this.getCategory();
@@ -192,7 +196,7 @@
 					cover: this.imgUrl,
 					summary: this.summary,
 					classify: this.form.classify.join(","),
-					category_id: this.form.category_id||1,
+					category_id: this.form.category_id || 1,
 				})
 				if(code == 200) {
 					var url = "/article/" + data.id;
@@ -242,12 +246,6 @@
 			},
 			publishTopic(name) {
 				this.postArticleFun()
-//				this.$refs[name].validate((valid) => {
-//					if(valid) {
-//						//						this.submitAreicle();
-//						this.postArticleFun()
-//					} else {}
-//				});
 			},
 			handleSearch2(value) {
 				this.data2 = !value || value.indexOf("@") >= 0 ? [] : [
@@ -262,48 +260,30 @@
 				let index = this.form.classify.indexOf(name);
 				this.form.classify.splice(index, 1);
 			},
-			//			selectChange(value) {
-			//				this.form.category_id = value;
-			//				this.classify = "";
-			//			},
-			inputChange() {
-				if(!this.classify) return;
-				this.form.classify.push(this.classify);
-				this.classify = "";
+			onEditorFocus() {
+				let dom = this.$el.querySelector('.editor')
+				this.quill = new Quill(dom, this.options);
+				//文本框内默认内容可解析HTML详情看官网
+				this.quill.clipboard.dangerouslyPasteHTML(0, this.value);
+
+				this.quill.on('selection-change', () => {
+					//我的理解为光标每落在编辑器上将执行
+					if(this.quill.getSelection()) {
+						const {
+							index,
+							length
+						} = this.quill.getSelection();
+						Object.assign(this, {
+							indexCursor: index, //字符在编辑器的下标
+							lengthCursor: length //选中的字符长度
+						})
+					}
+
+				})
 			},
-			submitAreicle() {
-				console.log('this.form.category_id', this.form.category_id)
-				axios({
-						method: "post",
-						url: api.ARTICLE_API.article_add,
-						data: {
-							title: this.form.title,
-							type: 0,
-							status: 0,
-							content: this.content,
-							eemail: this.form.email,
-							cover: this.imgUrl,
-							summary: this.summary,
-							classify: this.form.classify.join(","),
-							category_id: this.form.category_id,
-						},
-					})
-					.then((res) => {
-						if(res.error_code == CONSTS.ERROR_CODE.SUCCESS) {
-							var url = "article/" + res.result_data.id;
-							this.$router.push(url);
-							this.$Notice.success({
-								title: "添加文章成功",
-								desc: "感谢你的支持",
-							});
-						} else {
-							console.log("服务器异常");
-						}
-					})
-					.catch((err) => {
-						console.log("失误：" + err);
-					});
-			},
+			//替换操作 
+			onchange(int) {}
+
 		},
 
 	};
@@ -407,7 +387,8 @@
 		border-bottom: 1px solid #e2e2e2;
 		font-size: 14px;
 		line-height: 120%;
-		min-height: 300px;
+		/*min-height: 300px;*/
+		height: 200px;
 	}
 	
 	#editor {
@@ -512,5 +493,13 @@
 	.fa-paper-plane:before,
 	.fa-send:before {
 		content: "\f1d8";
+	}
+</style>
+<style type="text/css">
+	.ql-snow.ql-toolbar:after,
+	.ql-snow .ql-toolbar:after {
+		clear: both;
+		content: '';
+		display: none;
 	}
 </style>
