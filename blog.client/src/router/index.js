@@ -25,7 +25,7 @@ export default new Router({
 					path: '/article/:id(\\d+)',
 					component: resolve => require(['../view/article/details.vue'], resolve)
 				}, {
-					path: '/postedit',
+					path: '/write',
 					component: resolve => require(['../view/article/postedit.vue'], resolve),
 					/*beforeEnter:(to,from,next) => {
 						console.log(to)

@@ -79,7 +79,7 @@ service.interceptors.response.use(
 	},
 	error => {
 		console.log('err:' + error) // for debug
-		location.href = '/login'
+//		location.href = '/login'
 		return Promise.reject(error)
 	}
 )

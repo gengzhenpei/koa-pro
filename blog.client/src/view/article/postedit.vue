@@ -1,102 +1,120 @@
-/* * 编辑文章 */
-
 <template>
-
-	<div class="posteditContent">
-		<div class="post-from">
-			<Form ref="form" :model="form" :rules="ruleValidate" label-position="left" :label-width="120">
-				<FormItem label="文章标题" prop="title">
-					<Input class="inputWidth500" v-model="form.title" placeholder="标题..."></Input>
-				</FormItem>
-				<FormItem label="E-email">
-					<AutoComplete class="inputWidth500" v-model="form.email" @on-search="handleSearch2" placeholder="敢问英雄是否愿意留下邮箱">
-						<Option v-for="item in data2" :value="item" :key="item">{{ item }}</Option>
-					</AutoComplete>
-				</FormItem>
-				<FormItem label="文章类型">
-					<!--<Tag v-for="item in form.classify" :key="item" :name="item" type="border" color="primary" closable @on-close="handleClose">{{ item}}</Tag>-->
-					<Select v-model="form.category_id" filterable class="inputWidth150">
-						<Option v-for="(option, index) in category_list" :value="option.id" :key="index">{{option.name}}</Option>
-					</Select>
-					<!--<Input v-model="classify" placeholder="请填写文章类型" clearable class="inputWidth150" @on-enter="inputChange" @on-blur="inputChange"></Input>-->
-				</FormItem>
-			</Form>
-		</div>
-
-		<quill-editor ref="myTextEditor" :options="editorOption">
-			<div id="toolbar" slot="toolbar">
-				<span class="ql-formats"><select class="ql-header">
-		        <option value="1"></option>
-		        <option value="2"></option>
-		        <option value="3"></option>
-		        <option value="4"></option>
-		        <option value="5"></option>
-		        <option value="6"></option>
-		        <option selected="selected"></option>
-		      </select></span>
-				<span class="ql-formats"><button type="button" class="ql-bold"></button></span>
-				<span class="ql-formats"><button type="button" class="ql-italic"></button></span>
-				<span class="ql-formats"><button type="button" class="ql-underline"></button></span>
-				<span class="ql-formats"><button type="button" class="ql-strike"></button></span>
-				<span class="ql-formats"><button type="button" class="ql-blockquote"></button></span>
-				<span class="ql-formats"><button type="button" class="ql-code-block"></button></span>
-				<span class="ql-formats"><button type="button" class="ql-list" value="ordered"></button></span>
-				<span class="ql-formats"><button type="button" class="ql-list" value="bullet"></button></span>
-				<span class="ql-formats"><button type="button" class="ql-script" value="sub"></button></span>
-				<span class="ql-formats"><button type="button" class="ql-script" value="super"></button></span>
-				<span class="ql-formats"><button type="button" class="ql-indent" value="+1"></button></span>
-				<span class="ql-formats"><select class="ql-font">
-	        <option selected="selected"></option>
-	        <option value="serif"></option>
-	        <option value="monospace"></option>
-	      </select></span>
-				<span class="ql-formats"><select class="ql-color"></select></span>
-				<span class="ql-formats"> <select class="ql-background"></select></span>
-				<span class="ql-formats">
-	        <select class="ql-align">
-	        <option selected="selected"></option>
-	        <option value="center"></option>
-	        <option value="right"></option>
-	        <option value="justify"></option>
-	      </select>
-	      </span>
-				<span class="ql-formats">
-	          <button type="button" class="ql-clean"></button>
-	      </span>
-				<span class="ql-formats">
-	          <button type="button" class="ql-link"></button>
-	      </span>
-				<span class="ql-formats">
-	         <Upload
-		       	ref="upload"
-		       	:show-upload-list="false"
-		        :on-success="handleSuccess"
-		        :format="['jpg','jpeg','png']"
-		        :max-size="2048"
-		        :on-format-error="handleFormatError"
-		        :on-exceeded-size="handleMaxSize"
-		        multiple
-		        :action="url">
-				<Icon type="md-images" size="18"/>
-		    </Upload>
-	      </span>
-				<span class="ql-formats">
-	           <button type="button" class="ql-video"></button>
-	       </span>
+	<div id="Main">
+		<div class="sep20"></div>
+		<div class="box" id="box">
+			<div class="cell flex-one-row">
+				<div class="breadcrumb">
+					<a href="/">V2EX</a><span class="chevron">›</span><span>创作新主题</span>
+				</div>
+				<div>
+					<div class="fade" id="content_remaining">19995</div>
+				</div>
 			</div>
-		</quill-editor>
-		<div class="submit skd-text-center">
-			<Button type="primary" @click="handleSubmit('form')">提交</Button>
-		</div>
-		<!--<Button type="success" class="weButton" :disabled="content==''" @click="getContent">查看内容</Button>
-		<div v-show="showContent" class="showArticle">
-			<h1>{{form.title}}</h1>
-			<div class="quill-editor ql-container ql-snow no-b">
-				<div class="ql-editor" v-html="content"></div>
+			<form id="compose">
+				<div class="cell" style="padding: 0;">
+					<textarea v-model="form.title" class="new-title-input" tabindex="1" rows="1" maxlength="120" id="topic_title" name="title" autofocus="autofocus" placeholder="请输入主题标题，如果标题能够表达完整内容，则正文可以为空" style="font-size: 16px; line-height: 100%; overflow: hidden; overflow-wrap: break-word; height: 36px;"></textarea>
+				</div>
+				<div class="cell flex-one-row" style="padding-bottom: 0; padding-top: 0;">
+					<div class="tab-alt-container flex-one-row">
+						<a class="tab-alt active" href="javascript:continueToWrite()" id="tab-write">正文</a>
+						<a class="tab-alt" href="javascript:previewInPage()" id="tab-preview">预览</a>
+					</div>
+					<div id="syntax-selector">
+						<div id="syntax-label">Syntax</div>
+						<div class="radio-group">
+							<input type="radio" id="syntax-default" name="syntax" value="default"><label for="syntax-default">V2EX 原生格式</label>
+							<input type="radio" id="syntax-markdown" name="syntax" value="markdown" checked=""><label for="syntax-markdown">Markdown</label>
+						</div>
+						<div id="syntax-help">
+							&nbsp;
+							<a href="/help/markdown" target="_blank"><i class="fa fa-info-circle"></i></a>
+						</div>
+					</div>
+				</div>
+				<div class="cell" id="preview" style="display: none;">
+					<div class="topic_content markdown_body">
+						<p>发的啥地方</p>
+					</div>
+				</div>
+				<div id="workspace" style="">
+					<textarea v-model="content" style="" maxlength="20000" id="editor" name="content"></textarea>
+					<!--<div class="CodeMirror cm-s-default CodeMirror-wrap">
+						<div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 4px; left: 105.062px;">
+							<textarea autocorrect="off" autocapitalize="off" spellcheck="false" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;" tabindex="2"></textarea>
+						</div>
+						<div class="CodeMirror-vscrollbar" cm-not-content="true">
+							<div style="min-width: 1px; height: 0px;"></div>
+						</div>
+						<div class="CodeMirror-hscrollbar" cm-not-content="true">
+							<div style="height: 100%; min-height: 1px; width: 0px;"></div>
+						</div>
+						<div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div>
+						<div class="CodeMirror-gutter-filler" cm-not-content="true"></div>
+						<div class="CodeMirror-scroll" tabindex="-1">
+							<div class="CodeMirror-sizer" style="margin-left: 30px; margin-bottom: -17px; border-right-width: 13px; min-height: 24px; padding-right: 0px; padding-bottom: 0px;">
+								<div style="position: relative; top: 0px;">
+									<div class="CodeMirror-lines">
+										<div style="position: relative; outline: none;">
+											<div class="CodeMirror-measure"><span><span>&#8203;</span>x</span>
+											</div>
+											<div class="CodeMirror-measure"></div>
+											<div style="position: relative; z-index: 1;"></div>
+											<div class="CodeMirror-cursors" style="">
+												<div class="CodeMirror-cursor" style="left: 75.0625px; top: 0px; height: 16px;">&nbsp;</div>
+											</div>
+											<div class="CodeMirror-code">
+												<div style="position: relative;">
+													<div class="CodeMirror-gutter-wrapper" style="left: -30px;">
+														<div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">1</div>
+													</div>
+													<pre class=" CodeMirror-line "><span style="padding-right: 0.1px;">发的啥地方</span></pre>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div style="position: absolute; height: 13px; width: 1px; border-bottom: 0px solid transparent; top: 24px;"></div>
+							<div class="CodeMirror-gutters" style="height: 37px;">
+								<div class="CodeMirror-gutter CodeMirror-linenumbers" style="width: 29px;"></div>
+							</div>
+						</div>
+					</div>-->
+				</div>
+				<div class="cell" style="display: flex; align-items: center;">
+					<div style="margin-right: 5px;">主题节点</div>
+					<select v-model="form.category_id" name="node_name" id="nodes" data-select2-id="select2-data-nodes" tabindex="-1" class="select2-hidden-accessible" aria-hidden="true">
+						<option data-select2-id="select2-data-2-nm39"></option>
+						<option value="qna" title="问与答" data-select2-id="select2-data-3-mw5g">问与答 / qna</option>
+					</select>
+					<span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="select2-data-1-j2g8" style="width: 320px;">
+						<span class="selection">
+							<span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-nodes-container" aria-controls="select2-nodes-container">
+								<span class="select2-selection__rendered" id="select2-nodes-container" role="textbox" aria-readonly="true" title="请选择一个节点">
+							<span class="select2-selection__placeholder">请选择一个节点</span>
+					</span>
+					<span class="select2-selection__arrow" role="presentation">
+						<b role="presentation"></b>
+					</span>
+					</span>
+					</span>
+					<span class="dropdown-wrapper" aria-hidden="true"></span>
+					</span>
+					<div style="margin-left: auto;">
+						<a href="/help/node" target="_blank">V2EX 节点使用说明</a> <i class="fa fa-external-link gray"></i>
+					</div>
+				</div>
+				<input type="hidden" name="content" value="" id="topic_content">
+				<input type="hidden" name="once" id="once" value="75751">
+			</form>
+			<div class="cell flex-one-row">
+				<button @click="publishTopic()" type="button" class="super normal button">
+			<li class="fa fa-paper-plane"></li> &nbsp;发布主题
+		</button>
+				<span id="error_message"></span>
 			</div>
-		</div>-->
-	</div>
-
+		</div>
+		<div class="sep20"></div>
 	</div>
 
 </template>
@@ -152,6 +170,9 @@
 				category_list: [],
 			};
 		},
+		mounted() {
+			var self = this;
+		},
 		created() {
 			this.getCategory();
 		},
@@ -171,7 +192,7 @@
 					cover: this.imgUrl,
 					summary: this.summary,
 					classify: this.form.classify.join(","),
-					category_id: this.form.category_id,
+					category_id: this.form.category_id||1,
 				})
 				if(code == 200) {
 					var url = "/article/" + data.id;
@@ -219,13 +240,14 @@
 			getContent() {
 				this.showContent = true;
 			},
-			handleSubmit(name) {
-				this.$refs[name].validate((valid) => {
-					if(valid) {
-//						this.submitAreicle();
-						this.postArticleFun()
-					} else {}
-				});
+			publishTopic(name) {
+				this.postArticleFun()
+//				this.$refs[name].validate((valid) => {
+//					if(valid) {
+//						//						this.submitAreicle();
+//						this.postArticleFun()
+//					} else {}
+//				});
 			},
 			handleSearch2(value) {
 				this.data2 = !value || value.indexOf("@") >= 0 ? [] : [
@@ -240,10 +262,10 @@
 				let index = this.form.classify.indexOf(name);
 				this.form.classify.splice(index, 1);
 			},
-//			selectChange(value) {
-//				this.form.category_id = value;
-//				this.classify = "";
-//			},
+			//			selectChange(value) {
+			//				this.form.category_id = value;
+			//				this.classify = "";
+			//			},
 			inputChange() {
 				if(!this.classify) return;
 				this.form.classify.push(this.classify);
@@ -283,74 +305,212 @@
 					});
 			},
 		},
-		computed: {
-			editor() {
-				return this.$refs.myTextEditor.quill;
-			},
-		},
-		mounted() {
-			var self = this;
-			self.editor.on("editor-change", function(eventName, args) {
-				if(eventName === "text-change") {
-					self.content = self.editor.container.firstChild.innerHTML;
-				} else if(eventName === "selection-change") {
-					//				  	console.log("cdcdf",args)
-				}
-			});
-		},
-		components: {
-			quillEditor,
-		},
+
 	};
 </script>
 
-<style type="text/css">
-	.posteditContent {
-		padding: 20px;
-		background: #ffffff;
-	}
-	
-	.posteditContent .ql-container {
-		height: 500px !important;
-	}
-	
-	.ql-snow .ql-tooltip {
-		left: 0 !important;
-	}
-	
-	.weButton {
-		margin: 20px;
-	}
-	
-	.inputWidth500 {
-		width: 500px;
-	}
-	
-	.showArticle {
-		margin-bottom: 20px;
+<style scoped>
+	@import '../../static/css/codemirror.css';
+	.new-title-input {
+		width: 100%;
+		border: none;
+		resize: none;
+		background-color: var(--box-background-alt-color);
+		outline: 0;
+		font-size: 14px;
+		line-height: 20px;
 		padding: 10px;
-		background: #fff;
+		font-family: helvetica neue, hiragino sans gb, microsoft yahei, sans-serif, apple logo;
+		margin: 0;
+		box-sizing: border-box;
+		display: block;
 	}
 	
-	.tadRigth {
-		margin-right: 66px;
+	.tab-alt {
+		display: block;
+		line-height: 100%;
+		color: var(--link-color);
+		padding: 10px;
+		border-bottom: 3px solid transparent;
+		text-decoration: none;
+		transition: border-color .3s;
 	}
 	
-	.w-e-text {
-		padding: 0;
-		overflow-y: auto;
+	.tab-alt.active {
+		border-color: var(--box-foreground-color);
 	}
 	
-	.w-e-text-container {
-		height: 400px !important;
+	#syntax-selector {
+		display: inline-flex;
+		align-items: center;
 	}
 	
-	.submit button {
-		width: 20%;
-		margin: 20px;
+	#syntax-label {
+		font-size: 14px;
+		line-height: 100%;
+		vertical-align: bottom;
+		margin-right: 10px;
 	}
 	
-	.inputWidth150 {
-		width: 150px;
+	.radio-group {
+		background-color: #e2e2e2;
+		border-radius: 4px;
+		padding: 2px;
+		font-size: 14px;
+		line-height: 100%;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, .1) inset;
+		display: inline-flex;
+	}
+	
+	.radio-group>input[type=radio] {
+		visibility: hidden;
+		position: fixed;
+		opacity: 0;
+		pointer-events: none;
+	}
+	
+	.radio-group>input[type=radio]+label {
+		padding: 5px 14px;
+		border-radius: 3px;
+		box-sizing: border-box;
+		line-height: 100%;
+		font-size: 14px;
+		transition: .25s ease;
+	}
+	
+	.radio-group>input[type=radio]:checked+label {
+		background-color: #fff;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+	}
+	
+	#preview {
+		box-sizing: border-box;
+		min-height: 301px;
+	}
+	
+	.topic_content {
+		font-size: 14px;
+		line-height: 1.6;
+		color: var(--box-foreground-color);
+		word-break: break-word;
+	}
+	
+	.markdown_body>:last-child,
+	.note>:last-child,
+	.page>:last-child,
+	.problem>:last-child {
+		margin-bottom: 0!important;
+	}
+	
+	#workspace {
+		text-align: left;
+		border-bottom: 1px solid #e2e2e2;
+		font-size: 14px;
+		line-height: 120%;
+		min-height: 300px;
+	}
+	
+	#editor {
+		position: relative;
+		width: 100%;
+		height: 300px;
+		font-size: 16px;
+		line-height: 130%;
+	}
+	
+	#nodes {
+		width: 320px;
+		font-size: 14px;
+	}
+	
+	.select2-hidden-accessible {
+		border: 0!important;
+		clip: rect(0 0 0 0)!important;
+		-webkit-clip-path: inset(50%)!important;
+		clip-path: inset(50%)!important;
+		height: 1px!important;
+		overflow: hidden!important;
+		padding: 0!important;
+		position: absolute!important;
+		width: 1px!important;
+		white-space: nowrap!important;
+	}
+	
+	.select2-container {
+		box-sizing: border-box;
+		display: inline-block;
+		margin: 0;
+		position: relative;
+		vertical-align: middle;
+	}
+	
+	.select2-container--default.select2-container--open.select2-container--below .select2-selection--multiple,
+	.select2-container--default.select2-container--open.select2-container--below .select2-selection--single {
+		border-bottom-left-radius: 0;
+		border-bottom-right-radius: 0;
+	}
+	
+	.select2-container--default .select2-selection--single {
+		background-color: #fff;
+		border: 1px solid #aaa;
+		border-radius: 4px;
+	}
+	
+	.select2-container .select2-selection--single {
+		box-sizing: border-box;
+		cursor: pointer;
+		display: block;
+		height: 28px;
+		user-select: none;
+		-webkit-user-select: none;
+	}
+	
+	.select2-container--default .select2-selection--single .select2-selection__rendered {
+		color: #444;
+		line-height: 28px;
+	}
+	
+	.select2-container .select2-selection--single .select2-selection__rendered {
+		display: block;
+		padding-left: 8px;
+		padding-right: 20px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	
+	.select2-container--default .select2-selection--single .select2-selection__placeholder {
+		color: #999;
+	}
+	
+	.select2-container--default .select2-selection--single .select2-selection__arrow {
+		height: 26px;
+		position: absolute;
+		top: 1px;
+		right: 1px;
+		width: 20px;
+	}
+	
+	.select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
+		border-color: transparent transparent #888 transparent;
+		border-width: 0 4px 5px;
+	}
+	
+	.select2-container--default .select2-selection--single .select2-selection__arrow b {
+		border-color: #888 transparent transparent transparent;
+		border-style: solid;
+		border-width: 5px 4px 0;
+		height: 0;
+		left: 50%;
+		margin-left: -4px;
+		margin-top: -2px;
+		position: absolute;
+		top: 50%;
+		width: 0;
+	}
+	
+	.fa-paper-plane:before,
+	.fa-send:before {
+		content: "\f1d8";
 	}
 </style>

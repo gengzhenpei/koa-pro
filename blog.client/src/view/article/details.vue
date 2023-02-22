@@ -1,103 +1,106 @@
 <template>
-	<div>
-		<div class="skd-body">
-			<template v-if="article.id">
-				<div class="skd-content">
-					<h2 class="skd-ellipsis">{{article.title}}</h2>
-					<div class="tag">
-						<template v-for="item in article.classify">
-							<Tag checked color="green" v-if="article.classify">{{item}}</Tag>
-						</template>
-					</div>
-					<div class="message">
-						<small class="gray">
-							<a href="/member/tianlan">{{article.user_info.username}}</a> · <span :title="article.created_at">{{article.created_at}}</span> · {{article.browse}} 次点击 &nbsp; 
-						</small>
-						<!--<span>{{article.created_at || '--'}}</span>
-						<span>
-							<Icon type="ios-book-outline" size="20" class="book"></Icon>
-							{{article.browse}}
-						</span>-->
-					</div>
-					<div class="quill-editor ql-container ql-snow no-b">
-						<div class="ql-editor" v-html="article.content"></div>
-					</div>
+	<div id="Main">
+		<div class="sep20"></div>
+		<div class="box">
+			<div class="header">
+				<div class="fr">
+					<a href="/member/gracechen"><img src="https://cdn.v2ex.com/avatar/42b6/1e2c/12305_xlarge.png?m=1673353113" class="avatar" border="0" align="default" width="73" style="width: 73px; max-height: 73px;" alt="gracechen"></a>
 				</div>
-			</template>
-			<template v-else>
-				<div class="noDetails">
-					哦！<span class="un404"> 404 </span> (ー`´ー)
-				</div>
-			</template>
-			<div class="sep20"></div>
+				<a href="/">V2EX</a> <span class="chevron">&nbsp;›&nbsp;</span>
+				<a href="/go/jobs">酷工作</a>
+				<div class="sep10"></div>
+				<h1>{{article.title}}</h1>
+				<small class="gray">
+						<a href="/member/gracechen" v-if="article.user_info">{{article.user_info.username}}</a> · 
+						<span title="2023-01-10 20:53:21 +08:00">{{article.created_at}}</span> · 
+						{{article.browse}} 次点击 &nbsp; 
+					</small>
+			</div>
+			<!--<div class="outdated">这是一个创建于 42 天前的主题，其中的信息可能已经有所发展或是发生改变。</div>-->
 			<!--评论-->
-			<div class="box">
-				<div class="cell">
-					<span class="gray">29 条回复 &nbsp;<strong class="snow">•</strong> &nbsp;2023-02-21 23:52:13 +08:00</span>
-					<div class="fr" style="margin: -3px -5px 0px 0px;">
-						<a href="/tag/Java" class="tag">
-							<li class="fa fa-tag"></li> Java</a>
-						<a href="/tag/架构" class="tag">
-							<li class="fa fa-tag"></li> 架构</a>
-						<a href="/tag/技术" class="tag">
-							<li class="fa fa-tag"></li> 技术</a>
-						<a href="/tag/大数据" class="tag">
-							<li class="fa fa-tag"></li> 大数据</a>
-					</div>
-				</div>
-				<div v-for="(item, index) in comment_list" class="cell">
-					<table cellpadding="0" cellspacing="0" border="0" width="100%">
-						<tbody>
-							<tr>
-								<td width="48" valign="top" align="center"><img src="https://cdn.v2ex.com/avatar/bf97/05f1/44412_normal.png?m=1557909764" class="avatar" border="0" align="default" alt="tommyzhang"></td>
-								<td width="10" valign="top"></td>
-								<td width="auto" valign="top" align="left">
-									<div class="fr">
-										<div id="thank_area_12722527" class="thank_area">
-											<a href="#;" onclick="if (confirm('确认要不再显示来自 @tommyzhang 的这条回复？')) { ignoreReply(12722527, '39705'); }" class="thank" style="color: #ccc;">隐藏</a> &nbsp; &nbsp;
-											<a href="#;" onclick="if (confirm('确认花费 10 个铜币向 @tommyzhang 的这条回复发送感谢？')) { thankReply(12722527); }" class="thank">感谢回复者</a>
-										</div> &nbsp;
-										<a href="#;" onclick="replyOne('tommyzhang');"><img src="/static/img/reply_neue.png" align="absmiddle" border="0" alt="Reply" width="20"></a> &nbsp;&nbsp; <span class="no">1</span></div>
-									<div class="sep3"></div>
-									<strong><a href="/member/tommyzhang" class="dark">{{item.user_info.username}}</a></strong> &nbsp;
-									<div class="badges"></div>&nbsp; &nbsp;<span class="ago" :title="item.created_at">{{item.created_at}}</span>
-									<div class="sep5"></div>
-									<div class="reply_content">{{item.content}}</div>
-								</td>
-							</tr>
-						</tbody>
-					</table>
+			<div class="cell">
+				<div v-html="article.content" class="topic_content">
 				</div>
 			</div>
-			<!--添加评论-->
-			<div class="sep20"></div>
-			<div class="box" id="reply-box">
-				<div class="cell flex-one-row">
-					<div>添加一条新回复</div>
-					<div>
-						<a href="javascript:undockReplyBox();" id="undock-button" style="display: none;">取消回复框停靠</a> &nbsp; &nbsp;
-						<a href="#" onclick="goTop()">回到顶部</a>
+			<div class="topic_buttons">
+				<div class="">
+					<a href="/favorite/topic/908016?once=44572" class="tb">加入收藏</a> &nbsp;
+					<a href="#;" onclick="window.open('https://twitter.com/share?url=https://www.v2ex.com/t/908016?r=gengzhenpei&amp;related=v2ex&amp;hashtags=jobs&amp;text=👋🏻美国 AR 社交平台，超精英团队招全栈/Unity 工程师、产品经理、测试等人才', '_blank', 'width=550,height=370'); recordOutboundLink(this, 'Share', 'twitter.com');" class="tb">Tweet</a> &nbsp;
+					<a href="#;" onclick="if (confirm('确定不想再看到这个主题？')) { location.href = '/ignore/topic/908016?once=44572'; }" class="tb">忽略主题</a> &nbsp;
+					<div id="topic_thank">
+						<a href="#;" onclick="if (confirm('你确定要向本主题创建者发送谢意？')) { thankTopic(908016, '44572'); }" class="tb">感谢</a>
 					</div>
 				</div>
-				<div class="cell">
-					<form>
-						<textarea v-model="form.content" name="content" maxlength="10000" class="mll" id="reply_content" onfocus="setReplyBoxSticky();" style="overflow: hidden; overflow-wrap: break-word; resize: none; height: 112px;"></textarea>
-						<div class="flex-one-row" style="margin-top: 10px;">
-							<input @click="submitReply" value="回复" class="super normal button">
-							<input type="hidden" value="39705" id="once" name="once">
-							<span class="gray">请尽量让自己的回复能够对别人有帮助</span>
-						</div>
-					</form>
+				<div class="fr topic_stats" style="padding-top: 4px;">8526 次点击 &nbsp;∙&nbsp; 14 人收藏 &nbsp; </div>
+			</div>
+
+		</div>
+		<div class="sep20"></div>
+		<div class="box">
+			<div class="cell">
+				<span class="gray">{{comment_total}}&nbsp;条回复 &nbsp;<strong class="snow">•</strong> &nbsp;2023-02-21 23:52:13 +08:00</span>
+				<div class="fr" style="margin: -3px -5px 0px 0px;">
+					<a href="/tag/Java" class="tag">
+						<li class="fa fa-tag"></li> Java</a>
+					<a href="/tag/架构" class="tag">
+						<li class="fa fa-tag"></li> 架构</a>
+					<a href="/tag/技术" class="tag">
+						<li class="fa fa-tag"></li> 技术</a>
+					<a href="/tag/大数据" class="tag">
+						<li class="fa fa-tag"></li> 大数据</a>
 				</div>
-				<div class="cell flex-row-end">
-					<a href="/">← V2EX</a>
-				</div>
+			</div>
+			<div v-for="(item, index) in comment_list" class="cell">
+				<table cellpadding="0" cellspacing="0" border="0" width="100%">
+					<tbody>
+						<tr>
+							<td width="48" valign="top" align="center"><img src="https://cdn.v2ex.com/avatar/bf97/05f1/44412_normal.png?m=1557909764" class="avatar" border="0" align="default" alt="tommyzhang"></td>
+							<td width="10" valign="top"></td>
+							<td width="auto" valign="top" align="left">
+								<div class="fr">
+									<div id="thank_area_12722527" class="thank_area">
+										<a href="#;" onclick="if (confirm('确认要不再显示来自 @tommyzhang 的这条回复？')) { ignoreReply(12722527, '39705'); }" class="thank" style="color: #ccc;">隐藏</a> &nbsp; &nbsp;
+										<a href="#;" onclick="if (confirm('确认花费 10 个铜币向 @tommyzhang 的这条回复发送感谢？')) { thankReply(12722527); }" class="thank">感谢回复者</a>
+									</div> &nbsp;
+									<a href="#;" onclick="replyOne('tommyzhang');"><img src="/static/img/reply_neue.png" align="absmiddle" border="0" alt="Reply" width="20"></a> &nbsp;&nbsp; <span class="no">1</span></div>
+								<div class="sep3"></div>
+								<strong><a href="/member/tommyzhang" class="dark" v-if="item.user_info">{{item.user_info.username}}</a></strong> &nbsp;
+								<div class="badges"></div>&nbsp; &nbsp;<span class="ago" :title="item.created_at">{{item.created_at}}</span>
+								<div class="sep5"></div>
+								<div class="reply_content">{{item.content}}</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
-		<keep-alive>
-			<vmenu class="skd-recommend-lsit"></vmenu>
-		</keep-alive>
+		<!--添加评论-->
+		<div class="sep20"></div>
+		<div class="box" id="reply-box">
+			<div class="cell flex-one-row">
+				<div>添加一条新回复</div>
+				<div>
+					<a href="javascript:undockReplyBox();" id="undock-button" style="display: none;">取消回复框停靠</a> &nbsp; &nbsp;
+					<a href="#" onclick="goTop()">回到顶部</a>
+				</div>
+			</div>
+			<div class="cell">
+				<form>
+					<textarea v-model="form.content" name="content" maxlength="10000" class="mll" id="reply_content" onfocus="setReplyBoxSticky();" style="overflow: hidden; overflow-wrap: break-word; resize: none; height: 112px;"></textarea>
+					<div class="flex-one-row" style="margin-top: 10px;">
+						<input @click="submitReply" value="回复" class="super normal button" style="width: 62px;">
+						<input type="hidden" value="39705" id="once" name="once">
+						<span class="gray">请尽量让自己的回复能够对别人有帮助</span>
+					</div>
+				</form>
+			</div>
+			<div class="cell flex-row-end">
+				<a href="/">← V2EX</a>
+			</div>
+		</div>
+		<div class="sep20"></div>
 	</div>
+
 </template>
 
 <script>
@@ -134,8 +137,8 @@
 				form: {
 					article_id: '',
 					content: '',
-					
 				},
+				comment_total: 0,
 				comment_list: [],
 			}
 		},
@@ -144,13 +147,13 @@
 				this.form.article_id = this.$route.params.id
 			}
 			this.Detail()
+			this.getCommentTargetListFun();
 			var index = {
 				path: "",
 				name: "index",
 				title: "文章详情"
 			}
 			this.nav.push(index)
-			this.getCommentTargetListFun();
 		},
 		mounted() {},
 		methods: {
@@ -163,7 +166,8 @@
 					msg
 				} = await postComment(this.form)
 				if(code == 200) {
-					
+					this.form.content = '';
+					this.getCommentTargetListFun();
 				} else {
 					console.log("服务器异常");
 				}
@@ -197,6 +201,7 @@
 				} = await getCommentTargetList(this.query)
 				if(code == 200) {
 					self.comment_list = data.data
+					self.comment_total = data.meta.total
 				} else {
 					console.log("服务器异常");
 				}
@@ -262,13 +267,6 @@
 		color: #ed3f14;
 	}
 	
-	.box {
-		background-color: var(--box-background-color);
-		border-radius: var(--box-border-radius);
-		box-shadow: 0 2px 3px rgb(0 0 0 / 10%);
-		border-bottom: 1px solid var(--box-border-color);
-	}
-	
 	.fa {
 		display: inline-block;
 		font: normal normal normal 14px/1 FontAwesome;
@@ -318,8 +316,6 @@
 		cursor: default;
 	}
 	
-	
-	
 	.mll {
 		border-radius: 3px;
 		padding: 5px;
@@ -332,5 +328,86 @@
 		font-family: helvetica neue, luxi sans, Tahoma, hiragino sans gb, microsoft yahei, sans-serif, apple logo;
 		resize: vertical;
 		box-sizing: border-box;
+	}
+	
+	.header {
+		padding: 10px;
+		font-size: 15px;
+		line-height: 120%;
+		text-align: left;
+		border-bottom: 1px solid var(--box-border-color);
+		overflow: auto;
+	}
+	
+	.chevron {
+		font-family: lucida grande;
+		font-weight: 500;
+	}
+	
+	.fa {
+		display: inline-block;
+		font: normal normal normal 14px/1 FontAwesome;
+		font-size: inherit;
+		text-rendering: auto;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+	
+	.fa-chevron-up:before {
+		content: "\f077";
+	}
+	
+	.outdated {
+		padding: 10px;
+		font-size: 14px;
+		line-height: 120%;
+		text-align: left;
+		background-color: var(--box-background-alt-color);
+		border-left: 5px solid #f0f0f0;
+		border-bottom: 1px solid var(--box-border-color);
+		color: var(--color-gray);
+	}
+	
+	.topic_content {
+		font-size: 14px;
+		line-height: 1.6;
+		color: var(--box-foreground-color);
+		word-break: break-word;
+	}
+	
+	.topic_buttons {
+		padding: 5px;
+		font-size: 14px;
+		line-height: 120%;
+		background: linear-gradient(to bottom, #eee 0, #ccc 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#eeeeee", endColorstr="#cccccc", GradientType=0);
+		border-radius: 0 0 3px 3px;
+		text-align: left;
+		display: flex;
+		justify-content: space-between;
+	}
+	
+	.topic_stats {
+		text-shadow: 0 1px 0 #fff;
+		font-size: 11px;
+		color: var(--color-gray);
+		line-height: 100%;
+	}
+	
+	a.tb:active,
+	a.tb:link,
+	a.tb:visited {
+		font-size: 12px;
+		line-height: 12px;
+		color: #333;
+		text-decoration: none;
+		display: inline-block;
+		padding: 3px 10px;
+		border-radius: 15px;
+		text-shadow: 0 1px 0 #fff;
+	}
+	
+	#topic_thank {
+		display: inline-block;
 	}
 </style>

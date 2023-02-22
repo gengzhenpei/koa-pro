@@ -1,123 +1,53 @@
 <template>
-	<div style="display: flex;">
-		<div id="Main" class="">
-			<div class="box">
-				<div class="inner" id="Tabs">
-					<a v-for="(item,index) in category_list" :href="'/?tab='+item.id" :class="{'tab_current': cur_category_id==item.id}" class="tab">{{item.name}}</a>
-					<!--<a href="/?tab=creative" class="tab_current">创意</a>-->
-				</div>
-				<div class="cell" id="SecondaryTabs">
-					<div class="">
+	<div id="Main" class="">
+		<div class="sep20"></div>
+		<div class="box">
+			<div class="inner" id="Tabs">
+				<a v-for="(item,index) in category_list" :href="'/?tab='+item.id" :class="{'tab_current': cur_category_id==item.id}" class="tab">{{item.name}}</a>
+			</div>
+			<div class="cell" id="SecondaryTabs">
+				<div class="">
 
-						<a href="/go/all4all">二手交易</a> &nbsp; &nbsp;
-						<a href="/go/exchange">物物交换</a> &nbsp; &nbsp;
-						<a href="/go/free">免费赠送</a> &nbsp; &nbsp;
-						<a href="/go/dn">域名</a> &nbsp; &nbsp;
-						<a href="/go/tuan">团购</a> &nbsp; &nbsp;
-						<a href="/t/68631">安全提示</a>
-					</div>
-					<div class="fr">
-						<a href="/new/free">我要送东西</a> &nbsp; &nbsp;
-						<a href="/new/exchange">我要换东西</a> &nbsp; &nbsp;
-						<a href="/new/all4all">我要出二手</a>
-					</div>
+					<a href="/go/all4all">二手交易</a> &nbsp; &nbsp;
+					<a href="/go/exchange">物物交换</a> &nbsp; &nbsp;
+					<a href="/go/free">免费赠送</a> &nbsp; &nbsp;
+					<a href="/go/dn">域名</a> &nbsp; &nbsp;
+					<a href="/go/tuan">团购</a> &nbsp; &nbsp;
+					<a href="/t/68631">安全提示</a>
 				</div>
-				<div v-for="(item, index) in articleList" class="cell item" style="">
-					<table cellpadding="0" cellspacing="0" border="0" width="100%">
-						<tbody>
-							<tr>
-								<td width="48" valign="top" align="center">
-									<a href="/member/kekeyao">
-										<img v-lazy="item.cover" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="kekeyao">
-									</a>
-								</td>
-								<td width="10"></td>
-								<td width="auto" valign="middle" style="width: 560px;">
-									<span class="item_title"><a :href="'/article/'+item.id" class="topic-link">{{ item.title }}</a></span>
-									<div class="sep5"></div>
-									<span class="topic_info">
+				<div class="fr">
+					<a href="/new/free">我要送东西</a> &nbsp; &nbsp;
+					<a href="/new/exchange">我要换东西</a> &nbsp; &nbsp;
+					<a href="/new/all4all">我要出二手</a>
+				</div>
+			</div>
+			<div v-for="(item, index) in articleList" class="cell item" style="">
+				<table cellpadding="0" cellspacing="0" border="0" width="100%">
+					<tbody>
+						<tr>
+							<td width="48" valign="top" align="center">
+								<a href="/member/kekeyao">
+									<img v-lazy="item.cover" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="kekeyao">
+								</a>
+							</td>
+							<td width="10"></td>
+							<td width="auto" valign="middle" style="width: 560px;">
+								<span class="item_title"><a :href="'/article/'+item.id" class="topic-link">{{ item.title }}</a></span>
+								<div class="sep5"></div>
+								<span class="topic_info">
 										<div class="votes"></div>
 										<a class="node" href="/go/create">分享创造</a> &nbsp;•&nbsp; 
 										<strong><a href="/member/kekeyao">{{item.user_info.username}}</a></strong> 
 										&nbsp;•&nbsp; <span title="2023-02-16 20:43:56 +08:00">{{item.create_time}}</span> &nbsp;•&nbsp; 最后回复来自
-									<strong><a href="/member/cnsdytedison">cnsdytedison</a></strong>
-									</span>
-								</td>
-								<td width="70" align="right" valign="middle">
-									<a href="/t/916550#reply35" class="count_livid">35</a>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<!--<re-a></re-a>-->
-			</div>
-		</div>
-		<!--右边-->
-		<div id="Rightbar" class="">
-			<div class="box">
-				<div class="cell">
-					<table cellpadding="0" cellspacing="0" border="0" width="100%">
-						<tbody>
-							<tr>
-								<td width="48" valign="top">
-									<a href="/member/gengzhenpei"><img src="https://cdn.v2ex.com/avatar/54c4/4164/526939_large.png?m=1676467824" class="avatar" border="0" align="default" width="48" style="width: 48px; max-height: 48px;" alt="gengzhenpei"></a>
-								</td>
-								<td width="10" valign="top"></td>
-								<td width="auto" align="left">
-									<div class="fr">
-										<a href="/settings/night/toggle?once=80985" class="light-toggle"><img src="/static/img/toggle-light.png" align="absmiddle" height="10" alt="Light"></a>
-									</div><span class="bigger"><a href="/member/gengzhenpei">gengzhenpei</a></span>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-					<div class="sep10"></div>
-					<table cellpadding="0" cellspacing="0" border="0" width="100%">
-						<tbody>
-							<tr>
-								<td width="33%" align="center">
-									<a href="/my/nodes" class="dark" style="display: block;"><span class="bigger">1</span>
-										<div class="sep3"></div><span class="fade">节点收藏</span></a>
-								</td>
-								<td width="34%" style="border-left: 1px solid rgba(100, 100, 100, 0.4); border-right: 1px solid rgba(100, 100, 100, 0.4);" align="center">
-									<a href="/my/topics" class="dark" style="display: block;"><span class="bigger">0</span>
-										<div class="sep3"></div><span class="fade">主题收藏</span></a>
-								</td>
-								<td width="33%" align="center">
-									<a href="/my/following" class="dark" style="display: block;"><span class="bigger">0</span>
-										<div class="sep3"></div><span class="fade">特别关注</span></a>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<div class="cell" id="member-activity">
-					<div class="member-activity-bar">
-						<div class="member-activity-start" style="width: 0%;"></div>
-					</div>
-				</div>
-				<div class="cell" style="padding: 8px; line-height: 100%;">
-					<table cellpadding="0" cellspacing="0" border="0" width="100%">
-						<tbody>
-							<tr>
-								<td width="28">
-									<a href="/write"><img src="/static/img/essentials/compose.png?v=b9e1f045f4ad639733bf9f6dbc62ed4c" width="28" border="0" style="vertical-align: bottom;"></a>
-								</td>
-								<td width="10"></td>
-								<td width="auto" valign="middle" align="left">
-									<a href="/write">创作新主题</a>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<div class="cell flex-one-row" style="padding: 7px 10px;">
-					<a href="/notifications" class="fade">0 条未读提醒</a>
-					<div id="money">
-						<a href="/balance" class="balance_area" style="">18 <img src="/static/img/silver@2x.png" height="16" alt="S" border="0"> 70 <img src="/static/img/bronze@2x.png" height="16" alt="B" border="0"></a>
-					</div>
-				</div>
+								<strong><a href="/member/cnsdytedison">cnsdytedison</a></strong>
+								</span>
+							</td>
+							<td width="70" align="right" valign="middle">
+								<a href="/t/916550#reply35" class="count_livid">35</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>
@@ -235,13 +165,6 @@
 		border-top-right-radius: 3px;
 	}
 	
-	.inner {
-		padding: 10px;
-		font-size: 14px;
-		line-height: 150%;
-		text-align: left;
-	}
-	
 	a.tab:active,
 	a.tab:link,
 	a.tab:visited {
@@ -329,19 +252,7 @@
 		margin-top: -42px;
 		margin-right: 5px;
 	}
-</style>
-<style scoped>
-	#Main {
-		width: auto;
-		margin: 0 20px 20px 20px;
-	}
-	
-	#Rightbar {
-		width: 270px;
-		float: right;
-		margin-right: 20px;
-	}
-	
+
 	.item {
 		background-position: 0 bottom;
 		background-repeat: repeat-x;
