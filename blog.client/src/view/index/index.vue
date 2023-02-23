@@ -43,7 +43,7 @@
 								</span>
 							</td>
 							<td width="70" align="right" valign="middle">
-								<a href="/t/916550#reply35" class="count_livid">35</a>
+								<a href="/t/916550#reply35" class="count_livid">{{item.comment_count}}</a>
 							</td>
 						</tr>
 					</tbody>
@@ -164,32 +164,7 @@
 		border-top-left-radius: 3px;
 		border-top-right-radius: 3px;
 	}
-	
-	a.tab:active,
-	a.tab:link,
-	a.tab:visited {
-		display: inline-block;
-		font-size: 14px;
-		line-height: 14px;
-		padding: 5px 8px;
-		margin-right: 5px;
-		border-radius: var(--box-border-radius);
-		color: #555;
-		-webkit-tap-highlight-color: transparent;
-	}
-	
-	a.tab_current:active,
-	a.tab_current:link,
-	a.tab_current:visited {
-		display: inline-block;
-		font-size: 14px;
-		line-height: 14px;
-		padding: 5px 8px;
-		margin-right: 5px;
-		border-radius: 3px;
-		background-color: #334;
-		color: #fff;
-	}
+
 	
 	.article {
 		height: 200px;
@@ -258,13 +233,13 @@
 		background-repeat: repeat-x;
 	}
 	
-	.cell {
+	/*.cell {
 		padding: 10px;
 		font-size: 14px;
 		line-height: 150%;
 		text-align: left;
 		border-bottom: 1px solid var(--box-border-color);
-	}
+	}*/
 	
 	.item_title {
 		font-size: 16px;

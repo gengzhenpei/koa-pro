@@ -149,9 +149,37 @@ img {
 /*ul,ol,dl,dt,li{list-style: none;}
 ul{display: inline-block;height: auto;min-height: 1px;}/*让ul的高度自适应*/
 
-table {
+
+/*table {
 	border-collapse: collapse;
 	margin: 0 auto;
+}*/
+
+table {
+	display: table;
+	border-collapse: separate;
+	box-sizing: border-box;
+	border-spacing: 2px;
+	border-color: grey;
+}
+
+tbody {
+	display: table-row-group;
+	vertical-align: middle;
+	border-color: inherit;
+}
+
+tr {
+	display: table-row;
+	vertical-align: inherit;
+	border-color: inherit;
+}
+
+td {
+	display: table-cell;
+	vertical-align: inherit;
+	border-spacing: inherit;
+	border-collapse: separate;
 }
 
 body {
@@ -245,6 +273,32 @@ a:visited {
 	color: var(--link-color);
 	text-decoration: none;
 	word-break: break-word;
+}
+
+a.tab:active,
+a.tab:link,
+a.tab:visited {
+	display: inline-block;
+	font-size: 14px;
+	line-height: 14px;
+	padding: 5px 8px;
+	margin-right: 5px;
+	border-radius: var(--box-border-radius);
+	color: #555;
+	-webkit-tap-highlight-color: transparent;
+}
+
+a.tab_current:active,
+a.tab_current:link,
+a.tab_current:visited {
+	display: inline-block;
+	font-size: 14px;
+	line-height: 14px;
+	padding: 5px 8px;
+	margin-right: 5px;
+	border-radius: 3px;
+	background-color: #334;
+	color: #fff;
 }
 
 .gray {
@@ -490,6 +544,119 @@ a.dark:visited {
 .chevron {
 	font-family: lucida grande;
 	font-weight: 500;
+}
+
+
+.green {
+	color: #393;
+}
+
+.sl {
+	border-radius: 3px;
+	padding: 5px;
+	font-size: 14px;
+	border: 1px solid #ccc;
+	width: 320px;
+	font-family: helvetica neue, luxi sans, Tahoma, hiragino sans gb, microsoft yahei, sans-serif, apple logo;
+	box-sizing: border-box;
+}
+
+.ml {
+	border-radius: 3px;
+	padding: 5px;
+	font-size: 14px;
+	border: 1px solid #ccc;
+	display: block;
+	width: 320px;
+	height: 160px;
+	font-family: helvetica neue, luxi sans, Tahoma, hiragino sans gb, microsoft yahei, sans-serif, apple logo;
+	box-sizing: border-box;
+}
+
+.select2-hidden-accessible {
+	border: 0!important;
+	clip: rect(0 0 0 0)!important;
+	-webkit-clip-path: inset(50%)!important;
+	clip-path: inset(50%)!important;
+	height: 1px!important;
+	overflow: hidden!important;
+	padding: 0!important;
+	position: absolute!important;
+	width: 1px!important;
+	white-space: nowrap!important;
+}
+
+.select2-container {
+	box-sizing: border-box;
+	display: inline-block;
+	margin: 0;
+	position: relative;
+	vertical-align: middle;
+}
+
+.select2-container--default.select2-container--open.select2-container--below .select2-selection--multiple,
+.select2-container--default.select2-container--open.select2-container--below .select2-selection--single {
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.select2-container--default .select2-selection--single {
+	background-color: #fff;
+	border: 1px solid #aaa;
+	border-radius: 4px;
+}
+
+.select2-container .select2-selection--single {
+	box-sizing: border-box;
+	cursor: pointer;
+	display: block;
+	height: 28px;
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+	color: #444;
+	line-height: 28px;
+}
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+	display: block;
+	padding-left: 8px;
+	padding-right: 20px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__placeholder {
+	color: #999;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+	height: 26px;
+	position: absolute;
+	top: 1px;
+	right: 1px;
+	width: 20px;
+}
+
+.select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
+	border-color: transparent transparent #888 transparent;
+	border-width: 0 4px 5px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+	border-color: #888 transparent transparent transparent;
+	border-style: solid;
+	border-width: 5px 4px 0;
+	height: 0;
+	left: 50%;
+	margin-left: -4px;
+	margin-top: -2px;
+	position: absolute;
+	top: 50%;
+	width: 0;
 }
 .header {
     padding: 10px;

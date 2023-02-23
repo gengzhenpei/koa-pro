@@ -8,6 +8,8 @@ const { User } = require('@models/user')
 
 const { isArray, unique } = require('@lib/utils')
 
+const { sequelize } = require('@core/db')
+
 // 定义文章模型
 class ArticleDao {
 
@@ -37,7 +39,7 @@ class ArticleDao {
     article.sort_order = v.get('body.sort_order');
     article.admin_id = v.get('body.uid');
     article.category_id = v.get('body.category_id');
-    
+
     try {
       const res = await article.save();
       return [null, res]
@@ -84,7 +86,7 @@ class ArticleDao {
     }
   }
 
-  
+
   static async _handleUser(data, ids) {
     const finner = {
       where: {
@@ -196,6 +198,104 @@ class ArticleDao {
   }
 
   // 获取文章列表
+  static async list2(params = {}) {
+    const { category_id, keyword, page_size = 10, status, page = 1 } = params;
+    // 筛选方式
+    let filter = {
+      deleted_at: null
+    };
+
+    // 状态筛选，0-隐藏，1-正常
+    if (status || status === 0) {
+      filter.status = status
+    }
+
+    // 筛选方式：存在分类ID
+    if (category_id) {
+      filter.category_id = category_id;
+    }
+
+    // 筛选方式：存在搜索关键字
+    if (keyword) {
+      filter.title = {
+        [Op.like]: `%${keyword}%`
+      };
+    }
+
+    try {
+      const article = await Article.scope('iv').findAndCountAll({
+        limit: Number(page_size), //每页10条
+        offset: (page - 1) * Number(page_size),
+        where: filter,
+        order: [
+          ['created_at', 'DESC']
+        ]
+      });
+
+      let rows = article.rows
+
+      // 处理分类
+      const categoryIds = unique(rows.map(item => item.category_id))
+      const [categoryError, dataAndCategory] = await ArticleDao._handleCategory(rows, categoryIds)
+      if (!categoryError) {
+        rows = dataAndCategory
+      }
+
+      // 处理创建人
+      const adminIds = unique(rows.map(item => item.admin_id))
+      const [userError, dataAndAdmin] = await ArticleDao._handleUser(rows, adminIds)
+
+      if (!userError) {
+        rows = dataAndAdmin
+      }
+
+      // 处理评论数量
+      for(let i=0;i<rows.length;i++) {
+        let comment_count = await Comment.count({
+          where: {
+            article_id: rows[i].id,
+          }
+        })
+        console.log('comment_count', comment_count)
+        if(!comment_count) comment_count=0;
+        rows[i].setDataValue('comment_count', comment_count)
+        console.log('rows', rows)
+
+      }
+
+      if (Array.isArray(rows) && rows.length > 0) {
+        rows.sort((a, b) => b.sort_order - a.sort_order)
+      }
+
+      const data = {
+        data: rows,
+        // 分页
+        meta: {
+          current_page: parseInt(page),
+          per_page: 10,
+          count: article.count,
+          total: article.count,
+          total_pages: Math.ceil(article.count / 10),
+        }
+      }
+
+      return [null, data]
+    } catch (err) {
+      return [err, null]
+    }
+    try {
+      let sql = `select article.*, IFNULL(subtable.subnum, 0) as comment_count from article
+      left join (select article_id, content, count(1) as subnum from comment group by article_id) subtable 
+      on article.id=subtable.article_id LIMIT 0,10`;
+
+      const [results, metadata] = await sequelize.query(sql);
+      console.log('metadata', metadata)
+      return [null, metadata]
+    } catch (err) {
+      return [err, null]
+    }
+  }
+  // 获取文章列表
   static async list(params = {}) {
     const { category_id, keyword, page_size = 10, status, page = 1 } = params;
 
@@ -247,6 +347,7 @@ class ArticleDao {
       if (!userError) {
         rows = dataAndAdmin
       }
+
 
       if (Array.isArray(rows) && rows.length > 0) {
         rows.sort((a, b) => b.sort_order - a.sort_order)

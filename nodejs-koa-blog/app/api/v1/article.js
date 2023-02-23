@@ -107,7 +107,7 @@ router.get('/article', async (ctx) => {
   // const { category_id = 0, page = 1 } = ctx.query;
 
   // 没有缓存，则读取数据库
-  const [err, data] = await ArticleDao.list(ctx.query);
+  const [err, data] = await ArticleDao.list2(ctx.query);
   if (!err) {
     ctx.response.status = 200;
     ctx.body = res.json(data)
