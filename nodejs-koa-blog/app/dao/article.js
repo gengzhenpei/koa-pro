@@ -160,6 +160,42 @@ class ArticleDao {
       return [err, null]
     }
   }
+  //评论个数
+  static async _handleCommonNum(data, ids) {
+    const finner = {
+      where: {
+        id: {}
+      },
+      attributes: ['id', 'name']
+    }
+    if (isArray(ids)) {
+      finner.where.id = {
+        [Op.in]: ids
+      }
+    } else {
+      finner.where.id = ids
+    }
+
+    try {
+      if (isArray(ids)) {
+        const res = await Category.findAll(finner)
+        let category = {}
+        res.forEach(item => {
+          category[item.id] = item
+        })
+
+        data.forEach(item => {
+          item.setDataValue('category_info', category[item.category_id] || null)
+        })
+      } else {
+        const res = await Category.findOne(finner)
+        data.setDataValue('category_info', res)
+      }
+      return [null, data]
+    } catch (err) {
+      return [err, null]
+    }
+  }
 
   // 获取文章列表
   static async list2(params = {}) {
