@@ -491,3 +491,14 @@ a.dark:visited {
 	font-family: lucida grande;
 	font-weight: 500;
 }
+.header {
+    padding: 10px;
+    font-size: 15px;
+    line-height: 120%;
+    text-align: left;
+    border-bottom: 1px solid var(--box-border-color);
+    overflow: auto;
+}
+.fa-lock:before {
+    content: "\f023";
+}

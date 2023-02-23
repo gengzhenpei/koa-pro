@@ -23,6 +23,14 @@ class Resolve {
       data
     }
   }
+
+  failAuth(err = {}, msg = '登录失败', errorCode = 10002) {
+    return {
+      msg,
+      err,
+      errorCode
+    }
+  }
 }
 
 module.exports = {

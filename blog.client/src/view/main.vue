@@ -23,10 +23,12 @@
 		</div>
 		<div id="Wrapper" class="" :style="widHeigth">
 			<div class="content">
-				<div id="Leftbar"></div>
-				<keep-alive>
-					<vmenu id='Rightbar'></vmenu>
-				</keep-alive>
+				<template v-if="no_rightmenu_route_list.indexOf(routeName)<0">
+					<div id="Leftbar"></div>
+					<keep-alive>
+						<vmenu id='Rightbar'></vmenu>
+					</keep-alive>
+				</template>
 				<router-view></router-view>
 			</div>
 		</div>
@@ -72,7 +74,6 @@
 	import Vmenu from "@/components/menu";
 	export default {
 		components: {
-			breadcrumbNav,
 			Vmenu,
 		},
 		data() {
@@ -80,37 +81,16 @@
 				ss: true,
 				widHeigth: "min-height: 600px",
 				keyword: "",
-				menuItem: [{
-						text: "首页",
-						url: "/",
-						icon: "ios-navigate",
-					},
-					{
-						text: "使用工具",
-						url: "/tools",
-						icon: "ios-cog",
-					},
-					{
-						text: "推送历史",
-						url: "/history",
-						icon: "ios-clock-outline",
-					},
-					{
-						text: "关于我",
-						url: "/about",
-						icon: "ios-paper",
-					},
-				],
-				downMenu: [{
-					text: "时间倒计时",
-					url: "/regular",
-				}, ],
-				itemMenu: "ivu-menu-item",
-				selectedMenu: "ivu-menu-item ivu-menu-item-active ivu-menu-item-selected",
+				routeName: '',
+				no_rightmenu_route_list: ['login', 'register'],
 			};
 		},
-		
+		created() {
+			console.log('this.$route', this.$route)
+			console.log('no_rightmenu_route_list.indexOf(routeName)', this.no_rightmenu_route_list.indexOf(this.routeName))
+		},
 		mounted() {
+			this.routeName = this.$route.name
 			window.addEventListener("scroll", this.menu);
 			this.widHeigth = "min-height:" + (window.innerHeight - 202) + "px"; //滚动的长度
 		},

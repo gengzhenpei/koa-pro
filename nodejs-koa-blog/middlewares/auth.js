@@ -1,5 +1,7 @@
 const basicAuth = require('basic-auth')
 const jwt = require('jsonwebtoken')
+const { Resolve } = require('@lib/helper');
+const res = new Resolve();
 
 class Auth {
   constructor(level) {
@@ -33,6 +35,8 @@ class Auth {
         if (error.name === 'TokenExpiredError') {
           errMsg = "token已过期"
         }
+        ctx.body = res.failAuth(errMsg)
+        return false;
         throw new global.errs.Forbidden(errMsg);
       }
       if (decode.scope < this.level) {
