@@ -113,7 +113,6 @@
 			};
 			this.nav.push(index);
 			//获取真实ip
-			console.log(window.returnCitySN)
 		},
 		methods: {
 			async getData() {

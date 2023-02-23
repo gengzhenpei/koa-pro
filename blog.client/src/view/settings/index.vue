@@ -171,13 +171,7 @@
 	</div>
 </template>
 <script>
-	import Vmenu from "../../components/menu";
-	import axios from "../../common/httpUtils";
-	import api from "../../api/index";
-	import CONSTS from "../../common/consts";
 	import dateFormat from "../../common/dateFormat";
-	import path from "../../common/navData.js";
-	import reA from "../../components/recommendArticle.vue";
 	import utils from "../../common/utils";
 	import {
 		getArticle,
@@ -186,16 +180,10 @@
 		getCategory,
 	} from '@/api/category.js'
 	export default {
-		components: {
-			Vmenu,
-			reA,
-		},
 		data() {
 			return {
 				articleList: [],
 				category_list: [],
-				imgUrl: api.IMGURL,
-				nav: path.currentPath,
 				query: {
 					page: 1,
 					page_size: 10,
@@ -222,16 +210,6 @@
 		},
 		mounted() {
 			document.title = "时刻点官网";
-
-			this.nav = [];
-			var index = {
-				path: "/index",
-				name: "index",
-				title: "首页",
-			};
-			this.nav.push(index);
-			//获取真实ip
-			console.log(window.returnCitySN)
 		},
 		methods: {
 			async getData() {

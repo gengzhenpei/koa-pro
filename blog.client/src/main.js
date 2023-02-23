@@ -24,8 +24,8 @@ Vue.directive("money", {
 
 Vue.use(VueLazyLoad, {
 	preLoad: 1.3,
-	error: require('./static/logoLazy.png'),
-	loading: require('./static/logoLazy1.png')
+	error: require('./static/img/do_logo.png'),
+	loading: require('./static/img/do_logo.png')
 })
 Vue.config.productionTip = false
 

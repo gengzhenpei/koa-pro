@@ -368,12 +368,6 @@
 		min-height: 301px;
 	}
 	
-	.topic_content {
-		font-size: 14px;
-		line-height: 1.6;
-		color: var(--box-foreground-color);
-		word-break: break-word;
-	}
 	
 	.markdown_body>:last-child,
 	.note>:last-child,

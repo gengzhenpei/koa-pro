@@ -546,7 +546,6 @@ a.dark:visited {
 	font-weight: 500;
 }
 
-
 .green {
 	color: #393;
 }
@@ -658,14 +657,60 @@ a.dark:visited {
 	top: 50%;
 	width: 0;
 }
+
 .header {
-    padding: 10px;
-    font-size: 15px;
-    line-height: 120%;
-    text-align: left;
-    border-bottom: 1px solid var(--box-border-color);
-    overflow: auto;
+	padding: 10px;
+	font-size: 15px;
+	line-height: 120%;
+	text-align: left;
+	border-bottom: 1px solid var(--box-border-color);
+	overflow: auto;
 }
+
 .fa-lock:before {
-    content: "\f023";
+	content: "\f023";
+}
+
+.topic_content {
+	font-size: 14px;
+	line-height: 1.6;
+	color: var(--box-foreground-color);
+	word-break: break-word;
+}
+
+.topic_buttons {
+	padding: 5px;
+	font-size: 14px;
+	line-height: 120%;
+	background: linear-gradient(to bottom, #eee 0, #ccc 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#eeeeee", endColorstr="#cccccc", GradientType=0);
+	border-radius: 0 0 3px 3px;
+	text-align: left;
+	display: flex;
+	justify-content: space-between;
+}
+
+.topic_stats {
+	text-shadow: 0 1px 0 #fff;
+	font-size: 11px;
+	color: var(--color-gray);
+	line-height: 100%;
+}
+
+.reply_content>:first-child,
+.topic_content>:first-child {
+	margin-top: 0!important;
+}
+
+.markdown_body>:first-child,
+.note>:first-child,
+.page>:first-child {
+	margin-top: 0!important;
+}
+
+.dock_area {
+	background-color: #edf3f5;
+	background-image: url(/static/img/dock_shadow.png);
+	background-repeat: repeat-x;
+	padding: 0;
 }

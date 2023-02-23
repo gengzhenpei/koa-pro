@@ -12,7 +12,7 @@
 					</div>
 					<div class="tools">
 						<a href="/" class="top">首页</a>
-						<a href="/member/gengzhenpei" class="top">gengzhenpei</a>
+						<a href="/member/gengzhenpei" class="top">{{user_info.username}}</a>
 						<a href="/notes" class="top">记事本</a>
 						<a href="/t" class="top">时间轴</a>
 						<a href="/settings" class="top">设置</a>
@@ -78,6 +78,7 @@
 		},
 		data() {
 			return {
+				user_info: {},
 				ss: true,
 				widHeigth: "min-height: 600px",
 				keyword: "",
@@ -86,19 +87,21 @@
 			};
 		},
 		created() {
-			console.log('this.$route', this.$route)
-			console.log('no_rightmenu_route_list.indexOf(routeName)', this.no_rightmenu_route_list.indexOf(this.routeName))
 		},
 		mounted() {
 			this.routeName = this.$route.name
 			window.addEventListener("scroll", this.menu);
 			this.widHeigth = "min-height:" + (window.innerHeight - 202) + "px"; //滚动的长度
+			let user_info = localStorage.getItem('user_info')
+			if(user_info) {
+				this.user_info = JSON.parse(user_info)
+			}
+			
 		},
 		methods: {
 			routeTo(e) {
 				this.$router.push(e).catch((err) => {});
 			},
-
 			touLogin(nodesc) {
 				this.$Notice.success({
 					title: "退出成功",
@@ -123,7 +126,6 @@
 					path: v,
 				});
 			},
-
 			//页面滚动事件的实现
 			menu() {
 				this.scroll =

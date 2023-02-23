@@ -55,18 +55,29 @@ export default new Router({
 //					component: resolve => require(['../view/search/search.vue'], resolve)
 //				},
 				{
-					path: '/register',
-					component: resolve => require(['../view/login/register.vue'], resolve)
+					path: '/signin',
+					name: 'signin',
+					component: resolve => require(['../view/signin/signin.vue'], resolve)
 				},
 				{
-					path: '/login',
-					name: 'login',
-					component: resolve => require(['../view/login/login.vue'], resolve)
+					path: '/signup',
+					name: 'signup',
+					component: resolve => require(['../view/signup/signup.vue'], resolve)
+				},
+				{
+					path: '/signout',
+					name: 'signout',
+					component: resolve => require(['../view/signup/signout.vue'], resolve)
 				},
 				{
 					path: '/settings',
 					name: 'settings',
 					component: resolve => require(['../view/settings/index.vue'], resolve)
+				}, 
+				{
+					path: '/settings/email',
+					name: 'settingsEmail',
+					component: resolve => require(['../view/settings/email.vue'], resolve)
 				}, 
 				{
 					path: '/404',

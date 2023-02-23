@@ -373,31 +373,7 @@
 		color: var(--color-gray);
 	}
 	
-	.topic_content {
-		font-size: 14px;
-		line-height: 1.6;
-		color: var(--box-foreground-color);
-		word-break: break-word;
-	}
 	
-	.topic_buttons {
-		padding: 5px;
-		font-size: 14px;
-		line-height: 120%;
-		background: linear-gradient(to bottom, #eee 0, #ccc 100%);
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#eeeeee", endColorstr="#cccccc", GradientType=0);
-		border-radius: 0 0 3px 3px;
-		text-align: left;
-		display: flex;
-		justify-content: space-between;
-	}
-	
-	.topic_stats {
-		text-shadow: 0 1px 0 #fff;
-		font-size: 11px;
-		color: var(--color-gray);
-		line-height: 100%;
-	}
 	
 	a.tb:active,
 	a.tb:link,
