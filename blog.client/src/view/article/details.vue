@@ -62,7 +62,10 @@
 										<a href="#;" onclick="if (confirm('确认要不再显示来自 @tommyzhang 的这条回复？')) { ignoreReply(12722527, '39705'); }" class="thank" style="color: #ccc;">隐藏</a> &nbsp; &nbsp;
 										<a href="#;" onclick="if (confirm('确认花费 10 个铜币向 @tommyzhang 的这条回复发送感谢？')) { thankReply(12722527); }" class="thank">感谢回复者</a>
 									</div> &nbsp;
-									<a href="#;" onclick="replyOne('tommyzhang');"><img src="/static/img/reply_neue.png" align="absmiddle" border="0" alt="Reply" width="20"></a> &nbsp;&nbsp; <span class="no">1</span></div>
+									<a href="#;" onclick="replyOne('tommyzhang');">
+										<img src="~@/static/img/reply_neue.png" align="absmiddle" border="0" alt="Reply" width="20">
+									</a> &nbsp;&nbsp; <span class="no">1</span>
+								</div>
 								<div class="sep3"></div>
 								<strong><a href="/member/tommyzhang" class="dark" v-if="item.user_info">{{item.user_info.username}}</a></strong> &nbsp;
 								<div class="badges"></div>&nbsp; &nbsp;<span class="ago" :title="item.created_at">{{item.created_at}}</span>
@@ -123,16 +126,17 @@
 	} from '@/api/comment.js'
 
 	export default {
-		components: {
-			reA,
-			Vmenu
-		},
+//		components: {
+//			reA,
+//			Vmenu
+//		},
 		data() {
 			return {
 				article: '',
 				nav: path.currentPath,
 				query: {
 					is_user: 1,
+					article_id: '',
 				},
 				form: {
 					article_id: '',
@@ -145,6 +149,7 @@
 		created() {
 			if(this.$route.params.id) {
 				this.form.article_id = this.$route.params.id
+				this.query.article_id = this.$route.params.id
 			}
 			this.Detail()
 			this.getCommentTargetListFun();

@@ -1,0 +1,1 @@
+select article.id,  article.title, subtable.content as commnet_content, IFNULL(subtable.subnum, 0) as comment_count from article left join (select article_id, content, count(1) as subnum from comment group by article_id) as subtable on article.id=subtable.article_id order by article_id desc;
