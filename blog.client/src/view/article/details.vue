@@ -88,14 +88,14 @@
 				</div>
 			</div>
 			<div class="cell">
-				<form>
-					<textarea v-model="form.content" name="content" maxlength="10000" class="mll" id="reply_content" onfocus="setReplyBoxSticky();" style="overflow: hidden; overflow-wrap: break-word; resize: none; height: 112px;"></textarea>
+				<!--<form>-->
+					<textarea v-model="form.content" name="content" maxlength="10000" class="mll" style="overflow: hidden; overflow-wrap: break-word; resize: none; height: 112px;"></textarea>
 					<div class="flex-one-row" style="margin-top: 10px;">
-						<input @click="submitReply" value="回复" class="super normal button" style="width: 62px;">
-						<input type="hidden" value="39705" id="once" name="once">
+						<span @click="submitReply" value="回复" class="super normal button" style="width: 62px;">回复</span>
+						<!--<input type="hidden" value="39705" id="once" name="once">-->
 						<span class="gray">请尽量让自己的回复能够对别人有帮助</span>
 					</div>
-				</form>
+				<!--</form>-->
 			</div>
 			<div class="cell flex-row-end">
 				<a href="/">← V2EX</a>
@@ -107,16 +107,8 @@
 </template>
 
 <script>
-	import axios from '../../common/httpUtils'
-	import api from '../../api/index'
-	import CONSTS from '../../common/consts'
 	import dateFormat from '../../common/dateFormat'
 	import path from "../../common/navData.js"
-	import reA from "../../components/recommendArticle.vue"
-	import Vmenu from '../../components/menu.vue'
-	import 'quill/dist/quill.core.css'
-	import 'quill/dist/quill.snow.css'
-	import 'quill/dist/quill.bubble.css'
 	import {
 		detail,
 	} from '@/api/article.js'
@@ -165,6 +157,7 @@
 			//提交评论
 			async submitReply() {
 				var self = this;
+				console.log('llllllll')
 				const {
 					data,
 					code,
@@ -173,8 +166,6 @@
 				if(code == 200) {
 					this.form.content = '';
 					this.getCommentTargetListFun();
-				} else {
-					console.log("服务器异常");
 				}
 			},
 			//详情

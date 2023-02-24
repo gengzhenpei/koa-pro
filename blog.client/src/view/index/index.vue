@@ -50,6 +50,8 @@
 				</table>
 			</div>
 		</div>
+		<div class="sep20"></div>
+		
 	</div>
 </template>
 <script>
