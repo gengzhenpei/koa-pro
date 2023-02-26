@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-
+const redis = require("redis");
 const {
   dbName,
   host,
@@ -8,6 +8,9 @@ const {
   password
 } = require('../config/config').database
 
+const {
+  redisConfig
+} = require('../config/config')
 
 const sequelize = new Sequelize(dbName, user, password, {
   dialect: 'mysql',
@@ -55,7 +58,26 @@ sequelize.authenticate().then(res => {
 //   console.log('CREATE DATABASE FAIL!', err)
 // })
 
+// redis服务 建立连接
+const redisClient = redis.createClient({
+  socket: {
+    port: redisConfig.REDIS_PORT,
+    host: redisConfig.AREDIS_HOST,
+  },
+  password: redisConfig.REDIS_PASSWORD,
+});
+
+// redis监听连接事件
+redisClient
+  .connect()
+  .then(() => {
+    console.log("redis连接成功");
+  })
+  .catch((err) => {
+    console.log(err || "redis连接出错");
+  });
 
 module.exports = {
-  sequelize
+  sequelize,
+  redisClient
 }

@@ -7,7 +7,6 @@
 			</div>
 			<div class="cell" id="SecondaryTabs">
 				<div class="">
-
 					<a href="/go/all4all">二手交易</a> &nbsp; &nbsp;
 					<a href="/go/exchange">物物交换</a> &nbsp; &nbsp;
 					<a href="/go/free">免费赠送</a> &nbsp; &nbsp;
@@ -36,14 +35,14 @@
 								<div class="sep5"></div>
 								<span class="topic_info">
 										<div class="votes"></div>
-										<a class="node" href="/go/create">分享创造</a> &nbsp;•&nbsp; 
+										<!--<a class="node" href="/go/create">分享创造</a> &nbsp;•&nbsp;--> 
 										<strong><a href="/member/kekeyao">{{item.user_info.username}}</a></strong> 
-										&nbsp;•&nbsp; <span title="2023-02-16 20:43:56 +08:00">{{item.create_time}}</span> &nbsp;•&nbsp; 最后回复来自
-								<strong><a href="/member/cnsdytedison">cnsdytedison</a></strong>
+										&nbsp;•&nbsp; <span :title="item.created_at">{{dateFormat(item.created_at)}}</span> &nbsp;•&nbsp; 最后回复来自
+								<strong><a href="/member/cnsdytedison">{{item.final_comment.username}}</a></strong>
 								</span>
 							</td>
 							<td width="70" align="right" valign="middle">
-								<a href="/t/916550#reply35" class="count_livid">{{item.comment_count}}</a>
+								<a v-if="item.comment_count" href="/t/916550#reply35" class="count_livid">{{item.comment_count}}</a>
 							</td>
 						</tr>
 					</tbody>

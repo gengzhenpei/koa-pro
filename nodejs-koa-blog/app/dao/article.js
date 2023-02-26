@@ -160,42 +160,7 @@ class ArticleDao {
       return [err, null]
     }
   }
-  //评论个数
-  static async _handleCommonNum(data, ids) {
-    const finner = {
-      where: {
-        id: {}
-      },
-      attributes: ['id', 'name']
-    }
-    if (isArray(ids)) {
-      finner.where.id = {
-        [Op.in]: ids
-      }
-    } else {
-      finner.where.id = ids
-    }
-
-    try {
-      if (isArray(ids)) {
-        const res = await Category.findAll(finner)
-        let category = {}
-        res.forEach(item => {
-          category[item.id] = item
-        })
-
-        data.forEach(item => {
-          item.setDataValue('category_info', category[item.category_id] || null)
-        })
-      } else {
-        const res = await Category.findOne(finner)
-        data.setDataValue('category_info', res)
-      }
-      return [null, data]
-    } catch (err) {
-      return [err, null]
-    }
-  }
+  
 
   // 获取文章列表
   static async list2(params = {}) {
@@ -249,18 +214,26 @@ class ArticleDao {
         rows = dataAndAdmin
       }
 
-      // 处理评论数量
+      // 处理 评论数量、最后一条评论的用户名
       for(let i=0;i<rows.length;i++) {
+        //评论数量
         let comment_count = await Comment.count({
           where: {
             article_id: rows[i].id,
           }
         })
-        console.log('comment_count', comment_count)
         if(!comment_count) comment_count=0;
         rows[i].setDataValue('comment_count', comment_count)
-        console.log('rows', rows)
-
+        //最后一条评论的用户名
+        let final_comment='';
+        if(comment_count) {
+          final_comment = await Comment.findOne({ order: [['created_at', 'DESC']], where: {'article_id': rows[i].id} });
+        }
+        let final_user_id = final_comment.user_id;
+        console.log('final_user_id', final_user_id)
+        let final_user = await User.findOne({where: {'id': final_user_id}})
+        final_comment.setDataValue('username', final_user.username)
+        rows[i].setDataValue('final_comment', final_comment)
       }
 
       if (Array.isArray(rows) && rows.length > 0) {

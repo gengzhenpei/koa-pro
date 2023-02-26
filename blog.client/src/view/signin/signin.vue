@@ -7,7 +7,8 @@
 				<li class="fa fa-lock"></li>
 			</div>
 			<div class="message" onclick="$(this).slideUp('fast');">
-				<li class="fa fa-exclamation-triangle"></li>&nbsp; 你要查看的页面需要先登录</div>
+				<li class="fa fa-exclamation-triangle"></li>&nbsp; 你要查看的页面需要先登录
+			</div>
 			<div class="cell">
 				<form>
 					<table cellpadding="5" cellspacing="0" border="0" width="100%">
@@ -21,21 +22,24 @@
 							<tr>
 								<td width="120" align="right">密码</td>
 								<td width="auto" align="left">
-									<input v-model="form.password" type="password" class="sl" autocorrect="off" spellcheck="false" autocapitalize="off"></td>
+									<input v-model="form.password" @keyup.enter="loginFun()" type="password" class="sl" autocorrect="off" spellcheck="false" autocapitalize="off">
+								</td>
 							</tr>
-							<!--<tr>
+							<tr>
 								<td width="120" align="right">你是机器人吗？</td>
 								<td width="auto" align="left">
-									<img id="captcha-image" width="320" height="80" src="/_captcha" alt="CAPTCHA" onclick="refreshCaptcha()">
+									<div @click="getcaptchaFun()" v-html="captcha_img" style="display: inline-block;">
+									</div>
+									<!--<img id="captcha-image" width="320" height="80" src="/_captcha" alt="CAPTCHA" onclick="refreshCaptcha()">-->
 									<div class="sep10"></div>
-									<input type="text" class="sl" name="b07df2df80564ea4aea0c3623d50026f94f4ec896a5218e84a1efdf7575cad88" value="" autocorrect="off" spellcheck="false" autocapitalize="off" placeholder="请输入上图中的验证码，点击可以更换图片">
+									<input v-model="form.captcha" type="text" class="sl" autocorrect="off" spellcheck="false" autocapitalize="off" placeholder="请输入上图中的验证码，点击可以更换图片">
 								</td>
-							</tr>-->
+							</tr>
 							<tr>
 								<td width="120" align="right"></td>
 								<td width="auto" align="left">
-									<input type="hidden" value="25087" name="once">
-									<input @click="loginFun()" class="super normal button" value="登录">
+									<div class="err_tips">{{err_msg}}</div>
+									<input @click="loginFun()" class="super normal button" value="登录" style="width: 60px;">
 								</td>
 							</tr>
 							<tr>
@@ -56,15 +60,19 @@
 <script>
 	import {
 		login,
+		getcaptcha
 	} from '@/api/auth.js'
 	export default {
 		name: 'Layouts',
 		data() {
 			return {
+				captcha_img: '',
 				form: {
 					email: '',
 					password: '',
 					username: '',
+					captcha: '',
+					captcha_key: '',
 				},
 				rules_form: {
 					email: [{
@@ -78,27 +86,48 @@
 						trigger: 'blur'
 					}],
 				},
+				err_msg: '',
 			}
 		},
-		created() {},
+		created() {
+			this.getcaptchaFun()
+		},
 		methods: {
 			//登录
 			async loginFun() {
 				const {
 					code,
-					error_code,
+					errorCode,
 					data,
 					msg
 				} = await login(this.form)
 				if(code == 200) {
 					let token = data.token;
-					console.log('token', token)
 					localStorage.setItem('token', token)
 					let user_info = data;
 					localStorage.setItem('user_info', JSON.stringify(user_info))
-					window.location.href = '/'
+
+					//					window.location.href = '/'
+					this.$router.push({
+						path: '/'
+					})
 				} else {
-					console.log("服务器异常");
+					this.err_msg = msg;
+				}
+			},
+			//图形验证码
+			async getcaptchaFun() {
+				const {
+					code,
+					errorCode,
+					data,
+					msg
+				} = await getcaptcha(this.form)
+				if(code == 200) {
+					this.captcha_img = data.captcha;
+					this.form.captcha_key = data.captchaKey;
+				} else {
+					this.err_msg = msg;
 				}
 			},
 			google_login() {
@@ -114,21 +143,6 @@
 				});
 
 			},
-			attachsignin(element) {
-				auth2.attachclickhandler(element, {},
-					function(googleuser) {
-						var profile = auth2.currentuser.get().getbasicprofile();
-						console.log('id: ' + profile.getid());
-						console.log('full name: ' + profile.getname());
-						console.log('given name: ' + profile.getgivenname());
-						console.log('family name: ' + profile.getfamilyname());
-						console.log('image url: ' + profile.getimageurl());
-						console.log('email: ' + profile.getemail());
-					},
-					function(error) {
-						console.log(json.stringify(error, undefined, 2));
-					});
-			}
 		},
 	}
 </script>

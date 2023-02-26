@@ -46,6 +46,12 @@ User.init({
         defaultValue: 1,
         comment: '用户状态:0-禁用,1-正常'
     },
+    verify_key: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+        // 备注
+        comment: '注册邮箱串'
+    },
     created_at: {
         type: DataTypes.DATE,
         allowNull: false,

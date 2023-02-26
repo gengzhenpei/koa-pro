@@ -6,3 +6,7 @@ select article.*, IFNULL(subtable.subnum, 0) as comment_count from article
 select A.*, ifnull(AC.count, 0) as comment_count from article A 
 LEFT JOIN (select article_id, count(1) as count from comment group by article_id) AC 
 ON A.id = AC.article_id;
+
+
+//查评论的最新的一条的用户名
+
