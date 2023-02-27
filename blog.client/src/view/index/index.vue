@@ -35,10 +35,10 @@
 								<div class="sep5"></div>
 								<span class="topic_info">
 										<div class="votes"></div>
-										<a class="node" href="/go/create">分享创造</a> &nbsp;•&nbsp; 
+										<!--<a class="node" href="/go/create">分享创造</a> &nbsp;•&nbsp;--> 
 										<strong><a href="/member/kekeyao">{{item.user_info.username}}</a></strong> 
-										&nbsp;•&nbsp; <span title="2023-02-16 20:43:56 +08:00">{{item.create_time}}</span> &nbsp;•&nbsp; 最后回复来自
-								<strong><a href="/member/cnsdytedison">cnsdytedison</a></strong>
+										&nbsp;•&nbsp; <span :title="item.created_at">{{dateFormat(item.created_at)}}</span> &nbsp;•&nbsp; 最后回复来自
+								<strong><a href="/member/cnsdytedison">{{item.final_comment.username}}</a></strong>
 								</span>
 							</td>
 							<td width="70" align="right" valign="middle">

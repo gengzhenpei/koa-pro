@@ -7,10 +7,12 @@ import 'view-design/dist/styles/iview.css'
 import './static/css/base.css'
 import VueLazyLoad from 'vue-lazyload'
 import { money } from './filter/moneyFilter.js'
+import mixins from '@/utils/mixins.js'
 
 //import './components/comjs/amfeFlexible.js'
 // import './components/comjs/baiduZhanzhang.js'
 //import 'amfe-flexible'
+Vue.mixin(mixins)
 
 Vue.use(iView)
 /*自定义全局金额自动分割指令*/

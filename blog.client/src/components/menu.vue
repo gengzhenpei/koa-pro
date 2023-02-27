@@ -3,10 +3,8 @@
 <template>
 	<div class="">
 		<div class="sep20"></div>
-		<template v-if="userInfo.username">
-
+		<template v-if="userInfo.id">
 			<div class="box">
-
 				<div class="cell">
 					<table cellpadding="0" cellspacing="0" border="0" width="100%">
 						<tbody>
@@ -90,31 +88,33 @@
 				</div>
 			</div>
 		</template>
-		<!--注册-->
-		<div class="box">
-			<div class="cell">
-				<strong>V2EX = way to explore</strong>
-				<div class="sep5"></div>
-				<span class="fade">V2EX 是一个关于分享和探索的地方</span>
-			</div>
-			<div class="inner">
-				<div class="sep5"></div>
-				<div align="center">
-					<a href="/signup" class="super normal button">现在注册</a>
+		<template v-else>
+			<!--注册-->
+			<div class="box">
+				<div class="cell">
+					<strong>V2EX = way to explore</strong>
 					<div class="sep5"></div>
-					<div class="sep10"></div>
-					已注册用户请 &nbsp;
-					<a href="/signin">登录</a>
+					<span class="fade">V2EX 是一个关于分享和探索的地方</span>
+				</div>
+				<div class="inner">
+					<div class="sep5"></div>
+					<div align="center">
+						<a href="/signup" class="super normal button">现在注册</a>
+						<div class="sep5"></div>
+						<div class="sep10"></div>
+						已注册用户请 &nbsp;
+						<a href="/signin">登录</a>
+					</div>
 				</div>
 			</div>
-		</div>
-		<!--登录-->
-		<div class="box">
-			<div class="header">其他登录方式</div>
-			<div class="cell" style="text-align: center;">
-				<a onclick="location.href = '/auth/google?once=17154';" href="#" class="google-signin"></a>
+			<!--登录-->
+			<div class="box">
+				<div class="header">其他登录方式</div>
+				<div class="cell" style="text-align: center;">
+					<a onclick="location.href = '/auth/google?once=17154';" href="#" class="google-signin"></a>
+				</div>
 			</div>
-		</div>
+		</template>
 	</div>
 </template>
 
@@ -128,7 +128,7 @@
 		mounted() {
 			let user_info = localStorage.getItem('user_info')
 			if(user_info) {
-				this.user_info = JSON.parse(user_info)
+				this.userInfo = JSON.parse(user_info)
 			}
 		},
 		methods: {},

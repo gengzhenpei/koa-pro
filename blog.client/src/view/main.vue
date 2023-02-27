@@ -12,16 +12,23 @@
 					</div>
 					<div class="tools">
 						<a href="/" class="top">首页</a>
-						<a href="/member/gengzhenpei" class="top">{{user_info.username}}</a>
-						<a href="/notes" class="top">记事本</a>
-						<a href="/t" class="top">时间轴</a>
-						<a href="/settings" class="top">设置</a>
-						<a href="#;" onclick="if (confirm('确定要从 V2EX 登出？')) { location.href= '/signout?once=68999'; }" class="top">登出</a>
+						<template v-if="user_info.id">
+							<a href="/member/gengzhenpei" class="top">{{user_info.username}}</a>
+							<a href="/notes" class="top">记事本</a>
+							<a href="/t" class="top">时间轴</a>
+							<a href="/settings" class="top">设置</a>
+							<a href="#;" onclick="if (confirm('确定要从 V2EX 登出？')) { location.href= '/signout?once=68999'; }" class="top">登出</a>
+						</template>
+						<template v-else>
+							<a href="/signup" class="top">注册</a>
+							<a href="/signin" class="top">登录</a>
+						</template>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div id="Wrapper" class="" :style="widHeigth">
+		<div id="Wrapper" class="">
+			<!--<div id="Wrapper" class="" :style="widHeigth">-->
 			<div class="content">
 				<template v-if="no_rightmenu_route_list.indexOf(routeName)<0">
 					<div id="Leftbar"></div>
@@ -31,6 +38,8 @@
 				</template>
 				<router-view></router-view>
 			</div>
+			<div class="c"></div>
+			<div class="sep20"></div>
 		</div>
 		<BackTop :bottom="90" :right="190"></BackTop>
 		<div id="Bottom">
@@ -87,20 +96,27 @@
 			};
 		},
 		created() {
+			this.initUserInfo()
 		},
 		mounted() {
 			this.routeName = this.$route.name
 			window.addEventListener("scroll", this.menu);
 			this.widHeigth = "min-height:" + (window.innerHeight - 202) + "px"; //滚动的长度
-			let user_info = localStorage.getItem('user_info')
-			if(user_info) {
-				this.user_info = JSON.parse(user_info)
+
+		},
+		watch: {
+			$route: (to, from) => {
+				if(from.name == 'signin') {
+					this.initUserInfo()
+				}
 			}
-			
 		},
 		methods: {
-			routeTo(e) {
-				this.$router.push(e).catch((err) => {});
+			initUserInfo() {
+				let user_info = localStorage.getItem('user_info')
+				if(user_info) {
+					this.user_info = JSON.parse(user_info)
+				}
 			},
 			touLogin(nodesc) {
 				this.$Notice.success({
@@ -121,11 +137,6 @@
 					}, 200);
 				}
 			},
-			goa(v) {
-				this.$router.push({
-					path: v,
-				});
-			},
 			//页面滚动事件的实现
 			menu() {
 				this.scroll =
@@ -142,7 +153,7 @@
 				}
 			},
 		},
-		
+
 	};
 </script>
 
@@ -152,6 +163,12 @@
 		background-image: url('~@/static/img/shadow_light.png'), url(//static.v2ex.com/bgs/pixels.png);
 		background-position: 0 0, 0 0;
 		background-repeat: repeat-x, repeat;
+	}
+	
+	#Wrapper {
+		padding: 0 env(safe-area-inset-right) 0 env(safe-area-inset-left);
+		text-align: center;
+		/*background-color: #e2e2e2;*/
 	}
 	
 	#Top {

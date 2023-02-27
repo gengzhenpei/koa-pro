@@ -6,38 +6,96 @@
 const { Op } = require('sequelize')
 const { User } = require('@models/user')
 const bcrypt = require('bcryptjs')
+const {v4: uuidv4} = require('uuid')
+const { sendRegisterEmail } = require('@app/service/email.js')
 
 class UserDao {
   // 创建用用户
   static async create(params) {
     const { email, password, username } = params
-    const hasUser = await User.findOne({
+    console.log('params', params)
+    const hasEmail = await User.findOne({
       where: {
         email,
         deleted_at: null
       }
     });
 
-    if (hasUser) {
-      throw new global.errs.Existing('用户已存在');
+    if (hasEmail) {
+      throw new global.errs.Existing('邮箱已存在');
     }
-
-    const user = new User();
-    user.username = username
-    user.email = email
-    user.password = password
-
-    try {
-      const res = await user.save();
-      const data = {
-        code: 200,
-        email: res.email,
-        username: res.username
+    const hasUsername = await User.findOne({
+      where: {
+        username,
+        deleted_at: null
       }
-      return [null, data]
-    } catch (err) {
-      return [err, null]
+    });
+
+    if (hasUsername) {
+      throw new global.errs.Existing('用户名已存在');
     }
+
+    //生成邮箱校验码
+    const verify_key = uuidv4();
+    if (hasEmail && hasEmail.status == 0) {
+      //已经存在用户数据了,但是该用户没有验证,所以重新发送一封邮件让用户验证
+      hasEmail.verify_key = verify_key;
+      await hasEmail.save();
+      // await updateUserInfo({
+      //   user_id: data.user_id,
+      //   verify_key,
+      // });
+      sendRegisterEmail({ user_id: hasEmail.id, email: hasEmail.email, verify_key }); //发送校验邮箱
+    } else {
+      console.log('email', email)
+      //新增用户
+      const user = new User();
+      user.username = username
+      user.email = email
+      user.password = password
+      user.status = 0 //默认禁用 激活邮箱后才能用
+      user.verify_key = verify_key
+      try {
+        const res = await user.save();
+        const data = {
+          code: 200,
+          email: res.email,
+          username: res.username
+        }
+        sendRegisterEmail({ user_id: res.id, email: res.email, verify_key }); //发送校验邮箱
+        return [null, data]
+      } catch (err) {
+        return [err, null]
+      }
+      
+
+      result = await addUser({
+        user_name,
+        password: md5(password),
+        email,
+        verify_key,//随机生成字符串
+      });
+      const { user_id, email, verify_key } = result;
+      sendRegisterEmail({ user_id, email, verify_key }); //发送校验邮箱
+    }
+
+    // const user = new User();
+    // user.username = username
+    // user.email = email
+    // user.password = password
+    // user.status = 0 //默认禁用 激活邮箱后才能用
+
+    // try {
+    //   const res = await user.save();
+    //   const data = {
+    //     code: 200,
+    //     email: res.email,
+    //     username: res.username
+    //   }
+    //   return [null, data]
+    // } catch (err) {
+    //   return [err, null]
+    // }
   }
 
   // 验证密码
@@ -75,7 +133,7 @@ class UserDao {
       const filter = {
         id
       }
-      if(status) {
+      if (status) {
         filter.status = status
       }
       // 查询用户是否存在
@@ -122,9 +180,9 @@ class UserDao {
     }
 
     // 更新用户
-      user.email = v.get('body.email')
-      user.username = v.get('body.username')
-      user.status = v.get('body.status')
+    user.email = v.get('body.email')
+    user.username = v.get('body.username')
+    user.status = v.get('body.status')
 
     try {
       const res = await user.save();
@@ -135,13 +193,13 @@ class UserDao {
   }
 
   static async list(query = {}) {
-    const {id, email, status, username, page = 1, page_size =  10} = query
+    const { id, email, status, username, page = 1, page_size = 10 } = query
     const scop = 'bh'
     const filter = {}
-    if(email) {
+    if (email) {
       filter.email = email
     }
-    if(id) {
+    if (id) {
       filter.id = id
     }
     // 状态筛选，0-隐藏，1-正常
@@ -149,7 +207,7 @@ class UserDao {
       filter.status = status
     }
 
-    if(username) {
+    if (username) {
       if (username) {
         filter.username = {
           [Op.like]: `%${username}%`
@@ -178,10 +236,9 @@ class UserDao {
         }
       }
 
-      return  [null, data]
+      return [null, data]
 
-    }catch (err) {
-      console.log('err', err)
+    } catch (err) {
       return [err, null]
     }
   }

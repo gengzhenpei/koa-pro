@@ -18,3 +18,11 @@ export function login(data) {
     data,
   })
 }
+
+//图形验证码
+export function getcaptcha() {
+	return request({
+    url: '/user/captcha',
+    method: 'get',
+  })
+}

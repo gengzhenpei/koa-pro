@@ -16,7 +16,7 @@
 						{{article.browse}} 次点击 &nbsp; 
 					</small>
 			</div>
-			<!--<div class="outdated">这是一个创建于 42 天前的主题，其中的信息可能已经有所发展或是发生改变。</div>-->
+			<div v-if="dateFormatDays(article.created_at)>30" class="outdated">这是一个创建于 {{dateFormatDays(article.created_at)}} 天前的主题，其中的信息可能已经有所发展或是发生改变。</div>
 			<!--评论-->
 			<div class="cell">
 				<div v-html="article.content" class="topic_content">
@@ -38,7 +38,9 @@
 		<div class="sep20"></div>
 		<div class="box">
 			<div class="cell">
-				<span class="gray">{{comment_total}}&nbsp;条回复 &nbsp;<strong class="snow">•</strong> &nbsp;2023-02-21 23:52:13 +08:00</span>
+				<span class="gray">{{comment_total}}&nbsp;条回复 &nbsp;<strong class="snow">•</strong> &nbsp;
+					<span v-if="comment_list.length">{{comment_list[0].created_at}}</span>
+				</span>
 				<div class="fr" style="margin: -3px -5px 0px 0px;">
 					<a href="/tag/Java" class="tag">
 						<li class="fa fa-tag"></li> Java</a>
@@ -68,7 +70,7 @@
 								</div>
 								<div class="sep3"></div>
 								<strong><a href="/member/tommyzhang" class="dark" v-if="item.user_info">{{item.user_info.username}}</a></strong> &nbsp;
-								<div class="badges"></div>&nbsp; &nbsp;<span class="ago" :title="item.created_at">{{item.created_at}}</span>
+								<div class="badges"></div>&nbsp; &nbsp;<span class="ago" :title="item.created_at">{{dateFormat(item.created_at)}}</span>
 								<div class="sep5"></div>
 								<div class="reply_content">{{item.content}}</div>
 							</td>

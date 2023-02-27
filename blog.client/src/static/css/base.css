@@ -714,3 +714,10 @@ a.dark:visited {
 	background-repeat: repeat-x;
 	padding: 0;
 }
+.err_tips {
+	color: red;
+	font-size: 12px;
+}
+.c {
+    clear: both;
+}

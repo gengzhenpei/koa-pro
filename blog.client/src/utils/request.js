@@ -65,12 +65,12 @@ service.interceptors.request.use(
 service.interceptors.response.use(
 	response => {
 		const res = response.data
-		if(res.code !== 200) {
-			// 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
-			if(res.errorCode === 10002 || res.code === 50012 || res.code === 50014) {
+		if(res.errorCode !== 200) {
+			// 10002:token过期; 10003:需要携带token值;  50014:Token 过期了;
+			if(res.errorCode === 10002 || res.errorCode === 10003 || res.code === 50014) {
 				console.log('你已被登出，可以取消继续留在该页面，或者重新登录')
 				setTimeout(function() {
-					if (confirm('登录失败，重新登录？')) { location.href= '/signin'; }
+					if (confirm(`${res.err}, 重新登录？`)) { location.href= '/signin'; }
 				}, 500)
 			}
 			return response.data

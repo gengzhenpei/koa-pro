@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const captcha = require("svg-captcha");
 /***
  *
  */
@@ -52,7 +53,24 @@ const generateToken = function (uid, scope) {
   return token
 }
 
+//验证码生成
+const createCaptcha = function(config = {}) {
+  return captcha.create({
+    size: 4,
+    ignoreChars: "0o1iIl", // 避免生成容易混淆的字符
+    noise: 3,
+    color: true,
+    background: "#f4f4f4",
+    fontSize: 60,
+    width: 320,
+    height: 80,
+    ...config,
+  });
+}
+
+
 module.exports = {
   findMembers,
   generateToken,
+  createCaptcha
 }

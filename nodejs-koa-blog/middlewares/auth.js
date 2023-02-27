@@ -24,6 +24,8 @@ class Auth {
       // 无带token
       if (!tokenToken || !tokenToken.name) {
         errMsg = "需要携带token值";
+        ctx.body = res.failAuth(errMsg, null, 10003)
+        return false;
         throw new global.errs.Forbidden(errMsg);
       }
 

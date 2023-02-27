@@ -3,7 +3,8 @@
 		<div class="sep20"></div>
 		<div class="box">
 			<div class="header">
-				<a href="/">V2EX</a> <span class="chevron">&nbsp;›&nbsp;</span> 注册新用户</div>
+				<a href="/">V2EX</a> <span class="chevron">&nbsp;›&nbsp;</span> 注册新用户
+			</div>
 			<div class="cell">
 				<div class="topic_content markdown_body">
 					<p>欢迎来到 V2EX，这里是创意工作者的数字化公共空间。</p>
@@ -11,6 +12,46 @@
 					<p>如果你之前已经使用电子邮件注册，那么请从
 						<a href="/signin">这里</a> 登入。</p>
 				</div>
+			</div>
+			<div class="cell">
+				<form>
+					<table cellpadding="5" cellspacing="0" border="0" width="100%">
+						<tbody>
+							<tr>
+								<td width="120" align="right">邮箱</td>
+								<td width="auto" align="left">
+									<input v-model="form.email" type="text" class="sl" autofocus="autofocus" autocorrect="off" spellcheck="false" autocapitalize="off" placeholder="电子邮件地址">
+								</td>
+							</tr>
+							<tr>
+								<td width="120" align="right">密码</td>
+								<td width="auto" align="left">
+									<input v-model="form.password" @keyup.enter="loginFun()" type="password" class="sl" autocorrect="off" spellcheck="false" autocapitalize="off">
+								</td>
+							</tr>
+							<tr>
+								<td width="120" align="right">确认密码</td>
+								<td width="auto" align="left">
+									<input v-model="form.password1" @keyup.enter="loginFun()" type="password" class="sl" autocorrect="off" spellcheck="false" autocapitalize="off">
+								</td>
+							</tr>
+							<tr>
+								<td width="120" align="right">用户名</td>
+								<td width="auto" align="left">
+									<input v-model="form.username" type="text" class="sl" autofocus="autofocus" autocorrect="off" spellcheck="false" autocapitalize="off" placeholder="用户名">
+								</td>
+							</tr>
+							<tr>
+								<td width="120" align="right"></td>
+								<td width="auto" align="left">
+									<div class="err_tips">{{err_msg}}</div>
+									<input @click="registerFun()" class="super normal button" value="注册" style="width: 60px;">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<input type="hidden" value="https://www.v2ex.com/t/918655" name="next">
+				</form>
 			</div>
 			<div class="dock_area">
 				<div class="signup_methods">
@@ -26,85 +67,41 @@
 	</div>
 </template>
 <script>
-	import dateFormat from "../../common/dateFormat";
-	import utils from "../../common/utils";
 	import {
-		getArticle,
-	} from '@/api/article.js'
-	import {
-		getCategory,
-	} from '@/api/category.js'
+		register,
+	} from '@/api/auth.js'
 	export default {
 		data() {
 			return {
-				articleList: [],
-				category_list: [],
-				query: {
-					page: 1,
-					page_size: 10,
-					category_id: '',
-					status: 1,
-					keyword: '',
-				},
-				queryCategery: {
-					page: 1,
-					page_size: 10,
-					id: '',
-					status: 1,
-					name: '',
-				},
 				cur_category_id: '',
+				form: {
+					email: '',
+					password: '',
+					password1: '', 
+					password2: '', 
+					username: '',
+				},
+				err_msg: '',
 			};
 		},
-		created() {
-			this.getData();
-			this.cur_category_id = this.$route.query.tab;
-			if(this.cur_category_id) {
-				this.query.category_id = this.cur_category_id;
-			}
-		},
-		mounted() {
-			document.title = "时刻点官网";
-
-			this.nav = [];
-			var index = {
-				path: "/index",
-				name: "index",
-				title: "修改邮箱",
-			};
-			this.nav.push(index);
-			//获取真实ip
-			console.log(window.returnCitySN)
-		},
+		created() {},
+		mounted() {},
 		methods: {
-			async getData() {
-				await this.getCategoryFun()
-				await this.getArticleFun()
-			},
-			async getCategoryFun() {
+			//注册
+			async registerFun() {
+				this.form.password2 = this.form.password
 				const {
 					code,
 					error_code,
 					data,
 					msg
-				} = await getCategory(this.queryCategery)
+				} = await register(this.form)
 				if(code == 200) {
-					this.category_list = data.data;
-					if(!this.query.category_id) {
-						this.cur_category_id = data.data[0].id;
-						this.query.category_id = this.cur_category_id;
-					}
-				}
-			},
-			async getArticleFun() {
-				const {
-					code,
-					error_code,
-					data,
-					msg
-				} = await getArticle(this.query)
-				if(code == 200) {
-					this.articleList = data.data;
+					//					this.$router.push({
+					//						path: '/login'
+					//					})
+				} else {
+					console.log("服务器异常");
 				}
 			},
 		},
@@ -153,5 +150,9 @@
 		line-height: 32px;
 		padding-left: 0.8em;
 		color: #000;
+	}
+	
+	td {
+		padding: 5px;
 	}
 </style>
