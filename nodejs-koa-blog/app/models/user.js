@@ -47,8 +47,8 @@ User.init({
         comment: '用户状态:0-禁用,1-正常'
     },
     verify_key: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
+        type: DataTypes.STRING(255),
+        allowNull: true,
         // 备注
         comment: '注册邮箱串'
     },

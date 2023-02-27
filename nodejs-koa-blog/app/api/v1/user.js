@@ -35,7 +35,6 @@ router.post('/register', async (ctx) => {
     const password = v.get('body.password');
     const username = v.get('body.username');
 
-    console.log('email', email)
     // 创建用户
     const [err, data] = await UserDao.create({
         password,
