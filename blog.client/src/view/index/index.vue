@@ -7,7 +7,6 @@
 			</div>
 			<div class="cell" id="SecondaryTabs">
 				<div class="">
-
 					<a href="/go/all4all">二手交易</a> &nbsp; &nbsp;
 					<a href="/go/exchange">物物交换</a> &nbsp; &nbsp;
 					<a href="/go/free">免费赠送</a> &nbsp; &nbsp;
@@ -43,7 +42,7 @@
 								</span>
 							</td>
 							<td width="70" align="right" valign="middle">
-								<a href="/t/916550#reply35" class="count_livid">{{item.comment_count}}</a>
+								<a v-if="item.comment_count" href="/t/916550#reply35" class="count_livid">{{item.comment_count}}</a>
 							</td>
 						</tr>
 					</tbody>
@@ -51,7 +50,7 @@
 			</div>
 		</div>
 		<div class="sep20"></div>
-		
+
 	</div>
 </template>
 <script>
@@ -165,7 +164,6 @@
 		border-top-left-radius: 3px;
 		border-top-right-radius: 3px;
 	}
-
 	
 	.article {
 		height: 200px;
@@ -228,12 +226,11 @@
 		margin-top: -42px;
 		margin-right: 5px;
 	}
-
+	
 	.item {
 		background-position: 0 bottom;
 		background-repeat: repeat-x;
 	}
-	
 	/*.cell {
 		padding: 10px;
 		font-size: 14px;
