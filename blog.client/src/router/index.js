@@ -29,7 +29,7 @@ export default new Router({
 				}, 
 				{
 					path: '/write',
-					component: resolve => require(['../view/article/postedit.vue'], resolve),
+					component: resolve => require(['../view/article/write.vue'], resolve),
 					/*beforeEnter:(to,from,next) => {
 						console.log(to)
 							console.log("=======上是to下是from==========")
