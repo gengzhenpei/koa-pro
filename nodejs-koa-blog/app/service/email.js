@@ -7,7 +7,7 @@ const transporter = nodemailer.createTransport({
   secure: false, //465为true,其他为false
   auth: {
     user: '928022763@qq.com', // 自己的邮箱
-    pass: 'cmouimkapuhjbcci', // 授权码,邮箱的授权码
+    pass: 'ixhtxvevnhtubahg', // 授权码,邮箱的授权码
   },
 });
  

@@ -6,14 +6,14 @@
 const { Op } = require('sequelize')
 const { User } = require('@models/user')
 const bcrypt = require('bcryptjs')
-const {v4: uuidv4} = require('uuid')
+const { v4: uuidv4 } = require('uuid')
 const { sendRegisterEmail } = require('@app/service/email.js')
 
 class UserDao {
   // 创建用用户
   static async create(params) {
-    const { email, password, username } = params
-    console.log('params', params)
+    let { email, password, username } = params
+    console.log('email1', email)
     const hasEmail = await User.findOne({
       where: {
         email,
@@ -41,43 +41,43 @@ class UserDao {
       //已经存在用户数据了,但是该用户没有验证,所以重新发送一封邮件让用户验证
       hasEmail.verify_key = verify_key;
       await hasEmail.save();
-      // await updateUserInfo({
-      //   user_id: data.user_id,
-      //   verify_key,
-      // });
-      sendRegisterEmail({ user_id: hasEmail.id, email: hasEmail.email, verify_key }); //发送校验邮箱
-    } else {
-      console.log('email', email)
-      //新增用户
-      const user = new User();
-      user.username = username
-      user.email = email
-      user.password = password
-      user.status = 0 //默认禁用 激活邮箱后才能用
-      user.verify_key = verify_key
-      try {
-        const res = await user.save();
-        const data = {
-          code: 200,
-          email: res.email,
-          username: res.username
-        }
-        sendRegisterEmail({ user_id: res.id, email: res.email, verify_key }); //发送校验邮箱
-        return [null, data]
-      } catch (err) {
-        return [err, null]
-      }
-      
-
-      result = await addUser({
-        user_name,
-        password: md5(password),
-        email,
-        verify_key,//随机生成字符串
+      await updateUserInfo({
+        user_id: data.user_id,
+        verify_key,
       });
-      const { user_id, email, verify_key } = result;
-      sendRegisterEmail({ user_id, email, verify_key }); //发送校验邮箱
+
+      await sendRegisterEmail({ user_id: hasEmail.id, email: hasEmail.email, verify_key }); //发送校验邮箱
     }
+    //新增用户
+    console.log('email', email)
+    const user = new User();
+    user.verify_key = verify_key
+    user.status = 0 //默认禁用 激活邮箱后才能用
+    user.password = password
+    user.username = username
+    user.email = email
+    try {
+      const res = await user.save();
+      await sendRegisterEmail({ user_id: res.id, email: res.email, verify_key }); //发送校验邮箱
+      const data = {
+        code: 200,
+        email: res.email,
+        username: res.username
+      }
+      return [null, data]
+    } catch (err) {
+      return [err, null]
+    }
+
+
+    // result = await addUser({
+    //   user_name,
+    //   password: md5(password),
+    //   email,
+    //   verify_key,//随机生成字符串
+    // });
+    // const { user_id, email, verify_key } = result;
+    // sendRegisterEmail({ user_id, email, verify_key }); //发送校验邮箱
 
     // const user = new User();
     // user.username = username
