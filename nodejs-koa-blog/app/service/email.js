@@ -17,11 +17,12 @@ const transporter = nodemailer.createTransport({
 exports.sendRegisterEmail = ({ user_id, email, verify_key }) => {
   const url = `${service_ip}/regiter_success?id=${user_id}&verify_key=${verify_key}`;
   const params = {
-    from: '奥巴马<xxxxxxxx@qq.com>', // 收件人显示的发件人信息,xxxxxxx换成自己的qq
+    from: '928022763@qq.com', // 收件人显示的发件人信息,xxxxxxx换成自己的qq
     to: email, // 目标邮箱号
     subject: '注册新用户',
-    html: `点击链接即可注册完毕:<a style="color:red" href="${url}">${url}</a>`,
+    html: `点击链接即可注册完毕:<a style="color:red" href="http://${url}">${url}</a>`,
   };
+  console.log('params', params)
   return sendMsg(params);
 };
  
@@ -44,6 +45,7 @@ exports.sendCode = ({ email, verify_key }) => {
  */
 const sendMsg = (params) => {
   return new Promise((resolve) => {
+    console.log('transporter', transporter)
     transporter.sendMail(params, (err, data) => {
       resolve(null);
       transporter.close(); //发送完毕后关闭
