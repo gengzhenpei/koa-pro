@@ -232,7 +232,12 @@ class ArticleDao {
         let final_user_id = final_comment.user_id;
         console.log('final_user_id', final_user_id)
         let final_user = await User.findOne({where: {'id': final_user_id}})
-        final_comment.setDataValue('username', final_user.username)
+        console.log('final_user', final_user)
+        if(final_user) {
+          final_comment.setDataValue('username', final_user.username)
+        } else {
+          final_comment.setDataValue('username', '')
+        }
         rows[i].setDataValue('final_comment', final_comment)
       }
 
@@ -256,17 +261,7 @@ class ArticleDao {
     } catch (err) {
       return [err, null]
     }
-    try {
-      let sql = `select article.*, IFNULL(subtable.subnum, 0) as comment_count from article
-      left join (select article_id, content, count(1) as subnum from comment group by article_id) subtable 
-      on article.id=subtable.article_id LIMIT 0,10`;
-
-      const [results, metadata] = await sequelize.query(sql);
-      console.log('metadata', metadata)
-      return [null, metadata]
-    } catch (err) {
-      return [err, null]
-    }
+    
   }
   // 获取文章列表
   static async list(params = {}) {

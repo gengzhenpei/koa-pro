@@ -97,6 +97,7 @@
 					msg
 				} = await register(this.form)
 				if(code == 200) {
+					alert("激活邮件已发送，请激活邮件完成注册");
 					//					this.$router.push({
 					//						path: '/login'
 					//					})

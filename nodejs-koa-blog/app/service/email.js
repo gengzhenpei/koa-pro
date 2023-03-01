@@ -15,12 +15,12 @@ const transporter = nodemailer.createTransport({
  * 注册用户时发送邮箱
  */
 exports.sendRegisterEmail = ({ user_id, email, verify_key }) => {
-  const url = `${service_ip}/regiter_success?id=${user_id}&verify_key=${verify_key}`;
+  const url = `http://${service_ip}/api/v1/user/email_activate?id=${user_id}&verify_key=${verify_key}`;
   const params = {
     from: '928022763@qq.com', // 收件人显示的发件人信息,xxxxxxx换成自己的qq
     to: email, // 目标邮箱号
-    subject: '注册新用户',
-    html: `点击链接即可注册完毕:<a style="color:red" href="http://${url}">${url}</a>`,
+    subject: '全球贸易网注册新用户',
+    html: `点击链接即可注册完毕:<a style="color:red" href="${url}">${url}</a>`,
   };
   console.log('params', params)
   return sendMsg(params);

@@ -151,6 +151,31 @@ class UserDao {
     }
   }
 
+   // 查询用户信息 根据id status verify_key 
+   static async detail_by_verify_key(id, verify_key) {
+    try {
+      const scope = 'bh';
+      const filter = {
+        id,
+        status: 0,
+        verify_key
+      }
+
+      // 查询用户是否存在
+      const user = await User.scope(scope).findOne({
+        where: filter
+      })
+
+      if (!user) {
+        throw new global.errs.AuthFailed('账号不存在或者已被禁用，请联系管理员！')
+      }
+
+      return user
+    } catch (err) {
+      return err
+    }
+  }
+
   // 删除用户
   static async destroy(id) {
     // 检测是否存在用户
@@ -191,6 +216,26 @@ class UserDao {
       return [err, null]
     }
   }
+
+    // 邮箱激活 更新用户status为1
+    static async update_status(id) {
+      // 查询用户
+      const user = await User.findByPk(id);
+      if (!user) {
+        throw new global.errs.NotFound('没有找到相关用户');
+      }
+  
+      // 更新用户
+
+      user.status = 1
+  
+      try {
+        const res = await user.save();
+        return [null, res]
+      } catch (err) {
+        return [err, null]
+      }
+    }
 
   static async list(query = {}) {
     const { id, email, status, username, page = 1, page_size = 10 } = query

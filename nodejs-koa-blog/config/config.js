@@ -17,5 +17,5 @@ module.exports = {
     AREDIS_HOST: '127.0.0.1',
     REDIS_PASSWORD: '',
   },
-  service_ip: '127.0.0.1',
+  service_ip: '127.0.0.1:5000',
 }

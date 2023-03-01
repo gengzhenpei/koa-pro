@@ -7,6 +7,7 @@ const Router = require('koa-router')
 const { createCaptcha } = require('@core/util.js')
 const { setString, getString } = require('@core/redis.js')
 const { v4: uuidv4 } = require('uuid')
+const jwt = require('jsonwebtoken')
 
 const {
     RegisterValidator,
@@ -201,6 +202,34 @@ router.get('/captcha', async (ctx) => {
         ctx.body = res.fail('生成图形码失败')
     }
 
+})
+
+/**
+ * 邮箱激活
+ * 带邮箱校验码 校验
+ */
+router.get('/email_activate', async (ctx) => {
+    console.log('ctx.request.query', ctx.request.query)
+    const user_id = ctx.request.query.id
+    const verify_key = ctx.request.query.verify_key
+    console.log('verify_key', verify_key)
+    try {
+        const user = await UserDao.detail_by_verify_key(user_id, verify_key)
+        console.log('user', user)
+        if(user.id) {
+            const update_user = await UserDao.update_status(user.id);
+            if(update_user) {
+                ctx.response.redirect('http://127.0.0.1:8080/email_activate_suc');//发出一个跳转，将用户导向另一个路由。
+            } else {
+                ctx.response.redirect('http://127.0.0.1:8080/email_activate_err');
+            }
+        } else {
+            ctx.response.redirect('/email_activate_err');
+        }
+    } catch (error) {
+        this.redirect('/email_activate_err')
+    }
+    
 })
 
 module.exports = router
