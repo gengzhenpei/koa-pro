@@ -6,5 +6,8 @@
  */
 module.exports = {
     lintOnSave: false,//关闭 eslint
-
+	devServer:{
+		host: '0.0.0.0',
+        port:8083, // 启动端口号
+    }
 }

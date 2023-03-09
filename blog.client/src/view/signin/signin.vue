@@ -60,7 +60,8 @@
 <script>
 	import {
 		login,
-		getcaptcha
+		getcaptcha,
+		registersocialInfo
 	} from '@/api/auth.js'
 	export default {
 		name: 'Layouts',
@@ -87,6 +88,9 @@
 					}],
 				},
 				err_msg: '',
+				googleForm: {
+					
+				}
 			}
 		},
 		created() {
@@ -95,6 +99,28 @@
 		methods: {
 			//登录
 			async loginFun() {
+				const {
+					code,
+					errorCode,
+					data,
+					msg
+				} = await registersocialInfo(this.form)
+				if(code == 200) {
+					let token = data.token;
+					localStorage.setItem('token', token)
+					let user_info = data;
+					localStorage.setItem('user_info', JSON.stringify(user_info))
+
+					//					window.location.href = '/'
+					this.$router.push({
+						path: '/'
+					})
+				} else {
+					this.err_msg = msg;
+				}
+			},
+			//google登录
+			async googleLoginFun() {
 				const {
 					code,
 					errorCode,

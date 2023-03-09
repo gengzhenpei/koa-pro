@@ -1,5 +1,19 @@
 var moment = require('moment');
 export default {
+	data() {
+		return {
+			routeObj: "", //路由信息
+		};
+	},
+	watch: {
+		$route(to, from) {
+			//获取当前路由信息
+			this.routeObj = this.$route;
+		},
+	},
+	created() {
+		this.routeObj = this.$route;
+	},
 	methods: {
 		//时间格式化
 		dateFormat(date) {

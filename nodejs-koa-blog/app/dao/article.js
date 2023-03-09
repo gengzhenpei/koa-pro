@@ -231,7 +231,10 @@ class ArticleDao {
         }
         let final_user_id = final_comment.user_id;
         console.log('final_user_id', final_user_id)
-        let final_user = await User.findOne({where: {'id': final_user_id}})
+        let final_user
+        if(final_user_id) {
+          final_user = await User.findOne({where: {'id': final_user_id}})
+        }
         console.log('final_user', final_user)
         if(final_user) {
           final_comment.setDataValue('username', final_user.username)
