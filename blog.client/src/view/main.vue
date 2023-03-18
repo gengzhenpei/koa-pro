@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<!--头部-->
 		<div id="Top">
 			<div class="content">
 				<div class="site-nav">
@@ -27,21 +28,26 @@
 				</div>
 			</div>
 		</div>
+		<!--中间内容-->
 		<div id="Wrapper" class="">
 			<!--<div id="Wrapper" class="" :style="widHeigth">-->
 			<div class="content">
+				<!--右边bar-->
 				<template v-if="no_rightmenu_route_list.indexOf(routeName)<0">
 					<div id="Leftbar"></div>
 					<keep-alive>
 						<vmenu id='Rightbar'></vmenu>
 					</keep-alive>
 				</template>
+				<!--左边内容-->
 				<router-view></router-view>
 			</div>
 			<div class="c"></div>
 			<div class="sep20"></div>
 		</div>
+		<!--返回顶部-->
 		<BackTop :bottom="90" :right="190"></BackTop>
+		<!--底部-->
 		<div id="Bottom">
 			<div class="content">
 				<div class="inner">

@@ -225,21 +225,22 @@ class ArticleDao {
         if(!comment_count) comment_count=0;
         rows[i].setDataValue('comment_count', comment_count)
         //最后一条评论的用户名
-        let final_comment='';
+        let final_comment='', final_user_id, final_user;
+        console.log('comment_count', comment_count)
+
         if(comment_count) {
+          console.log('comment_count', comment_count)
           final_comment = await Comment.findOne({ order: [['created_at', 'DESC']], where: {'article_id': rows[i].id} });
+          console.log('final_comment', final_comment)
+          final_user_id = final_comment.user_id;
         }
-        let final_user_id = final_comment.user_id;
         console.log('final_user_id', final_user_id)
-        let final_user
         if(final_user_id) {
           final_user = await User.findOne({where: {'id': final_user_id}})
         }
         console.log('final_user', final_user)
         if(final_user) {
           final_comment.setDataValue('username', final_user.username)
-        } else {
-          final_comment.setDataValue('username', '')
         }
         rows[i].setDataValue('final_comment', final_comment)
       }

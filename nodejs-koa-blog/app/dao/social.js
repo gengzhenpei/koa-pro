@@ -5,30 +5,78 @@
  */
 const { Op } = require('sequelize')
 const { User } = require('@models/user')
+const { Social } = require('@models/social')
 const bcrypt = require('bcryptjs')
 const { v4: uuidv4 } = require('uuid')
 const { sendRegisterEmail } = require('@app/service/email.js')
 
-class UserDao {
+class SocialDao {
   //google登录 注册
   static async socialLogin(params) {
-    let { id, email, name } = params
-  }
-  // 创建用用户
-  static async create(params) {
-    let { email, password, username } = params
-    console.log('email1', email)
-    const hasEmail = await User.findOne({
+    let { id, email, name, given_name, family_name, locale } = params
+    const hasId = await Social.findOne({
       where: {
-        email,
+        social_id: id,
+        deleted_at: null
+      }
+    });
+    if (hasId) {
+      // throw new global.errs.Existing('用户google账号没注册');
+      // 用户已经google注册过，直接返回用户信息，生成token
+    } else {
+      //user表创建用户
+      const user = new User();
+      user.verify_key = verify_key
+      user.status = 0 //默认禁用 激活邮箱后才能用
+      user.password = password
+      user.username = username
+      user.email = email
+      try {
+        const user_res = await user.save();
+      } catch (err) {
+      }
+      //新增用户
+      console.log('email', email)
+      const social = new Social();
+      social.social_id = id
+      social.user_id = user_res.id
+      social.platform = 'google'
+      social.name = name
+      social.email = email
+      social.given_name = given_name
+      social.family_name = family_name
+      social.locale = locale
+      social.picture = picture
+      
+      try {
+        const res = await social.save();
+        const data = {
+          code: 200,
+          email: res.email,
+          username: res.name
+        }
+        return [null, data]
+      } catch (err) {
+        return [err, null]
+      }
+    }
+  }
+  // 创建用户
+  static async create(params) {
+    let { id, email, password, username } = params
+    console.log('email1', email)
+    const hasId = await Social.findOne({
+      where: {
+        social_id: id,
         deleted_at: null
       }
     });
 
-    if (hasEmail) {
-      throw new global.errs.Existing('邮箱已存在');
+    if (hasId) {
+      // throw new global.errs.Existing('用户google账号没注册');
+
     }
-    const hasUsername = await User.findOne({
+    const hasUsername = await Social.findOne({
       where: {
         username,
         deleted_at: null
@@ -295,5 +343,5 @@ class UserDao {
 }
 
 module.exports = {
-  UserDao
+  SocialDao
 }
