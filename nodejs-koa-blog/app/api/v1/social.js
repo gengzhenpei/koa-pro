@@ -27,115 +27,55 @@ const AUTH_USER = 8;
 const AUTH_ADMIN = 16;
 
 const router = new Router({
-    prefix: '/api/v1/user'
+    prefix: '/api/v1/social'
 })
 
-// 用户注册
-router.post('/register', async (ctx) => {
-    // 通过验证器校验参数是否通过
-    const v = await new RegisterValidator().validate(ctx);
-    const email = v.get('body.email');
-    const password = v.get('body.password');
-    const username = v.get('body.username');
 
-    // 创建用户
-    const [err, data] = await UserDao.create({
-        password,
-        email,
-        username
-    });
-
-    if (!err) {
-        const [errToken, token, id] = await LoginManager.userLogin({
-            email,
-            password
-        });
-        if (!errToken) {
-            data.token = token
-            data.id = id
-        }
-        // 返回结果
-        ctx.response.status = 200;
-        ctx.body = res.json(data);
-
-    } else {
-        ctx.body = res.fail(err)
-    }
-
-})
-
-// 登录
-router.post('/login', async (ctx) => {
-    try {
-        let captcha = ctx.request.body.captcha;
-        let captcha_key = ctx.request.body.captcha_key;
-        let captcha_key_val = await getString(captcha_key)
-        //过期
-        if(!captcha_key_val) {
-            ctx.body = res.fail({ errCode: 10004, msg: '验证码过期'}, '验证码过期');
-            return false;
-        // 不区分大小写
-        } else if(captcha.toLowerCase()!==captcha_key_val.toLowerCase()) {
-            ctx.body = res.fail({errCode: 10004, msg: '验证码错误'}, '验证码错误');
-            return false;
-        }
-        
-        const v = await new UserLoginValidator().validate(ctx);
-        let [err, token, id] = await LoginManager.userLogin({
-            email: v.get('body.email'),
-            password: v.get('body.password')
-        });
-
-        if (!err) {
-            let [err, data] = await UserDao.detail(id);
-            if (!err) {
-                data.setDataValue('token', token)
-                ctx.response.status = 200;
-                ctx.body = res.json(data);
-            }
-        } else {
-            ctx.body = res.fail(err, err.msg);
-        }
-    } catch (error) {
-        ctx.body = res.fail(error, error.msg);
-    }
-
-});
 
 // google登录
-router.post('/socilaLogin', async (ctx) => {
+router.post('/socialLogin', async (ctx) => {
     try {
-        // let captcha = ctx.request.body.captcha;
-        // let captcha_key = ctx.request.body.captcha_key;
-        // let captcha_key_val = await getString(captcha_key)
-        // //过期
-        // if(!captcha_key_val) {
-        //     ctx.body = res.fail({ errCode: 10004, msg: '验证码过期'}, '验证码过期');
-        //     return false;
-        // // 不区分大小写
-        // } else if(captcha.toLowerCase()!==captcha_key_val.toLowerCase()) {
-        //     ctx.body = res.fail({errCode: 10004, msg: '验证码错误'}, '验证码错误');
-        //     return false;
-        // }
         let body = ctx.request.body
-        let [] = await SocialDao.socialLogin(body);
-
-        const v = await new UserLoginValidator().validate(ctx);
-        let [err, token, id] = await LoginManager.userLogin({
-            email: v.get('body.email'),
-            password: v.get('body.password')
-        });
+        //social 表 查询用户是否存在
+        let [err, social] = await SocialDao.detail(body.id, 1)
 
         if (!err) {
-            let [err, data] = await UserDao.detail(id);
-            if (!err) {
-                data.setDataValue('token', token)
+            //添加
+            const [rerr, data] = await SocialDao.socialLogin({
+                ...body
+            });
+            if (!rerr) {
+                const [errToken, token, id] = await LoginManager.socialLogin({
+                    email: data.email,
+                });
+                if (!errToken) {
+                    data.token = token
+                    data.id = id
+                }
+                // 返回结果
                 ctx.response.status = 200;
                 ctx.body = res.json(data);
+
+            } else {
+                ctx.body = res.fail(err)
             }
         } else {
-            ctx.body = res.fail(err, err.msg);
+            let [err, token, id] = await LoginManager.socialLogin({
+                email: social.email,
+            });
+
+            if (!err) {
+                let [err, data] = await UserDao.detail(id);
+                if (!err) {
+                    data.setDataValue('token', token)
+                    ctx.response.status = 200;
+                    ctx.body = res.json(data);
+                }
+            } else {
+                ctx.body = res.fail(err, err.msg);
+            }
         }
+
     } catch (error) {
         ctx.body = res.fail(error, error.msg);
     }
@@ -258,9 +198,9 @@ router.get('/email_activate', async (ctx) => {
     try {
         const user = await UserDao.detail_by_verify_key(user_id, verify_key)
         console.log('user', user)
-        if(user.id) {
+        if (user.id) {
             const update_user = await UserDao.update_status(user.id);
-            if(update_user) {
+            if (update_user) {
                 ctx.response.redirect('http://127.0.0.1:8080/email_activate_suc');//发出一个跳转，将用户导向另一个路由。
             } else {
                 ctx.response.redirect('http://127.0.0.1:8080/email_activate_err');
@@ -271,7 +211,7 @@ router.get('/email_activate', async (ctx) => {
     } catch (error) {
         this.redirect('/email_activate_err')
     }
-    
+
 })
 
 module.exports = router

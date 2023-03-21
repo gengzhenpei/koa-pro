@@ -10,13 +10,9 @@ const { v4: uuidv4 } = require('uuid')
 const { sendRegisterEmail } = require('@app/service/email.js')
 
 class UserDao {
-  //google登录 注册
-  static async socialLogin(params) {
-    let { id, email, name } = params
-  }
   // 创建用用户
   static async create(params) {
-    let { email, password, username } = params
+    let { email, password='geng124#', username } = params
     console.log('email1', email)
     const hasEmail = await User.findOne({
       where: {
@@ -56,8 +52,8 @@ class UserDao {
     console.log('email', email)
     const user = new User();
     user.verify_key = verify_key
-    user.status = 0 //默认禁用 激活邮箱后才能用
-    user.password = password
+    user.status = 1 //默认禁用 激活邮箱后才能用
+    user.password = password||123456
     user.username = username
     user.email = email
     try {
@@ -74,32 +70,6 @@ class UserDao {
     }
 
 
-    // result = await addUser({
-    //   user_name,
-    //   password: md5(password),
-    //   email,
-    //   verify_key,//随机生成字符串
-    // });
-    // const { user_id, email, verify_key } = result;
-    // sendRegisterEmail({ user_id, email, verify_key }); //发送校验邮箱
-
-    // const user = new User();
-    // user.username = username
-    // user.email = email
-    // user.password = password
-    // user.status = 0 //默认禁用 激活邮箱后才能用
-
-    // try {
-    //   const res = await user.save();
-    //   const data = {
-    //     code: 200,
-    //     email: res.email,
-    //     username: res.username
-    //   }
-    //   return [null, data]
-    // } catch (err) {
-    //   return [err, null]
-    // }
   }
 
   // 验证密码

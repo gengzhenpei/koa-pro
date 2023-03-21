@@ -37,7 +37,7 @@ User.init({
             const psw = bcrypt.hashSync(val, salt);
             this.setDataValue("password", psw);
         },
-        allowNull: false,
+        allowNull: true,
         comment: '登录密码'
     },
     status: {

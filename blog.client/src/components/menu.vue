@@ -122,6 +122,9 @@
 </template>
 
 <script>
+	import {
+		socialLogin
+	} from '@/api/auth.js'
 	export default {
 		data() {
 			return {
@@ -135,9 +138,6 @@
 			if(user_info) {
 				this.userInfo = JSON.parse(user_info)
 			}
-			console.log('user_info', user_info)
-			console.log('routeObj', this.routeObj)
-
 			//google登录
 			//提取#后面的部分
 			var fragmentString = location.hash.substring(1);
@@ -157,6 +157,27 @@
 			}
 		},
 		methods: {
+			//登录
+			async socialLoginFun(form) {
+				const {
+					code,
+					errorCode,
+					data,
+					msg
+				} = await socialLogin(form)
+				if(code == 200) {
+					console.log('data', data)
+					let token = data.token;
+					localStorage.setItem('token', token)
+					let user_info = data;
+					localStorage.setItem('user_info', JSON.stringify(user_info))
+					this.$router.push({
+						path: '/'
+					})
+				} else {
+					this.err_msg = msg;
+				}
+			},
 			// If there's an access token, try an API request.
 			// Otherwise, start OAuth 2.0 flow.
 			trySampleRequest(params) {
@@ -170,10 +191,13 @@
 					xhr.onreadystatechange = function(e) {
 						if(xhr.readyState === 4 && xhr.status === 200) {
 							console.log(xhr.response);
-							let path = _this.$route.path
-							_this.$router.replace({
-								path: path
-							})
+							let res = JSON.parse(xhr.response);
+							_this.socialLoginFun(res);
+//							let path = _this.$route.path
+//							//登录成功后 刷新路由后面参数
+//							_this.$router.replace({
+//								path: path
+//							})
 						} else if(xhr.readyState === 4 && xhr.status === 401) {
 							// Token invalid, so prompt for user permission.
 							_this.oauth2SignIn();

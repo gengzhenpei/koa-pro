@@ -26,3 +26,13 @@ export function getcaptcha() {
     method: 'get',
   })
 }
+
+//三方账号登录 login
+
+export function socialLogin(data) {
+  return request({
+    url: '/social/socialLogin',
+    method: 'post',
+    data,
+  })
+}

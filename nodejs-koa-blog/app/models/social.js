@@ -4,12 +4,12 @@ const { sequelize } = require('@core/db')
 const { DataTypes, Model } = require('sequelize')
 
 // 定义用户模型
-class Socail extends Model {
+class Social extends Model {
 
 }
 
 // 初始用户模型
-Socail.init({
+Social.init({
     id: {
         type: DataTypes.INTEGER(10).UNSIGNED,
         primaryKey: true,
@@ -17,7 +17,7 @@ Socail.init({
         comment: '用户主键ID'
     },
     social_id: {
-        type: DataTypes.INTEGER(10).UNSIGNED,
+        type: DataTypes.STRING(50),
         comment: '平台用户id'
     },
     user_id: {
@@ -51,12 +51,17 @@ Socail.init({
         comment: '地区'
     },
     picture: {
-        type: DataTypes.STRING(20),
+        type: DataTypes.STRING(500),
         comment: '头像'
+    },
+    status: {
+        type: DataTypes.TINYINT,
+        allowNull: true,
+        defaultValue: 1,
+        comment: '用户状态:0-禁用,1-正常'
     },
     created_at: {
         type: DataTypes.DATE,
-        allowNull: false,
         comment: '创建时间',
         get() {
             return moment(this.getDataValue('created_at')).format('YYYY-MM-DD HH:mm:ss');
