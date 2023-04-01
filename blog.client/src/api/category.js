@@ -1,10 +1,10 @@
 import request from '@/utils/request'
 
 //查
-export function getCategory(params) {
+export function getCategory(data) {
   return request({
-    url: '/category',
-    method: 'get',
-    params,
+    url: '/category/all',
+    method: 'post',
+    data,
   })
 }

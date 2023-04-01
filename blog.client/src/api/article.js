@@ -1,11 +1,11 @@
 import request from '@/utils/request'
 
 //列表 article 
-export function getArticle(params) {
+export function getArticle(data) {
   return request({
-    url: '/article',
-    method: 'get',
-    params,
+    url: '/article/all',
+    method: 'post',
+    data,
   })
 }
 

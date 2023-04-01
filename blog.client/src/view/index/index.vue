@@ -38,7 +38,7 @@
 										<!--<a class="node" href="/go/create">分享创造</a> &nbsp;•&nbsp;--> 
 										<strong><a v-if="item.user_info" href="/member/kekeyao">{{item.user_info.username}}</a></strong> 
 										&nbsp;•&nbsp; <span :title="item.created_at">{{dateFormat(item.created_at)}}</span> &nbsp;•&nbsp; 最后回复来自
-								<strong><a href="/member/cnsdytedison">{{item.final_comment.username}}</a></strong>
+								<strong><a v-if="item.final_comment" href="/member/cnsdytedison">{{item.final_comment.username}}</a></strong>
 								</span>
 							</td>
 							<td width="70" align="right" valign="middle">
@@ -56,7 +56,7 @@
 <script>
 	import Vmenu from "../../components/menu";
 	import axios from "../../common/httpUtils";
-	import api from "../../api/index";
+//	import api from "../../api/index";
 	import CONSTS from "../../common/consts";
 	import dateFormat from "../../common/dateFormat";
 	import path from "../../common/navData.js";
@@ -77,7 +77,7 @@
 			return {
 				articleList: [],
 				category_list: [],
-				imgUrl: api.IMGURL,
+//				imgUrl: api.IMGURL,
 				nav: path.currentPath,
 				query: {
 					page: 1,
@@ -142,8 +142,9 @@
 					data,
 					msg
 				} = await getArticle(this.query)
+				console.log('data', data)
+				this.articleList = data;
 				if(code == 200) {
-					this.articleList = data.data;
 				}
 			},
 		},

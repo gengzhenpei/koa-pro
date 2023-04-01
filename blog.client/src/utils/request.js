@@ -10,7 +10,8 @@ import { Base64 } from 'js-base64'
 
 // 创建axios实例
 const service = axios.create({
-	baseURL: 'http://localhost:5000/api/v1', // api的base_url
+//	baseURL: 'http://localhost:5000/api/v1', // api的base_url
+	baseURL: 'http://localhost:3000/api', // api的base_url
 	timeout: 15000, // 请求超时时间
 	headers: {
 		'Content-Type': 'application/json'
@@ -64,19 +65,21 @@ service.interceptors.request.use(
 // respone拦截器
 service.interceptors.response.use(
 	response => {
+		console.log('response', response)
 		const res = response.data
-		if(res.errorCode !== 200) {
-			// 10002:token过期; 10003:需要携带token值;  50014:Token 过期了;
-			if(res.errorCode === 10002 || res.errorCode === 10003 || res.code === 50014) {
-				console.log('你已被登出，可以取消继续留在该页面，或者重新登录')
-				setTimeout(function() {
-					if (confirm(`${res.err}, 重新登录？`)) { location.href= '/signin'; }
-				}, 500)
-			}
-			return response.data
-		} else {
-			return response.data
-		}
+		return response.data
+//		if(res.errorCode !== 200) {
+//			// 10002:token过期; 10003:需要携带token值;  50014:Token 过期了;
+//			if(res.errorCode === 10002 || res.errorCode === 10003 || res.code === 50014) {
+//				console.log('你已被登出，可以取消继续留在该页面，或者重新登录')
+//				setTimeout(function() {
+//					if (confirm(`${res.err}, 重新登录？`)) { location.href= '/signin'; }
+//				}, 500)
+//			}
+//			return response.data
+//		} else {
+//			return response.data
+//		}
 	},
 	error => {
 		console.log('err:' + error) // for debug
