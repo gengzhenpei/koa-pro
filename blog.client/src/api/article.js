@@ -3,7 +3,7 @@ import request from '@/utils/request'
 //列表 article 
 export function getArticle(data) {
   return request({
-    url: '/article/all',
+    url: '/article/allArticle',
     method: 'post',
     data,
   })

@@ -36,13 +36,13 @@
 								<span class="topic_info">
 										<div class="votes"></div>
 										<!--<a class="node" href="/go/create">分享创造</a> &nbsp;•&nbsp;--> 
-										<strong><a v-if="item.user_info" href="/member/kekeyao">{{item.user_info.username}}</a></strong> 
+										<strong><a v-if="item.User" href="/member/kekeyao">{{item.User.name}}</a></strong> 
 										&nbsp;•&nbsp; <span :title="item.created_at">{{dateFormat(item.created_at)}}</span> &nbsp;•&nbsp; 最后回复来自
-								<strong><a v-if="item.final_comment" href="/member/cnsdytedison">{{item.final_comment.username}}</a></strong>
+								<strong><a v-if="item.comments.length" href="/member/cnsdytedison">{{item.comments[0].User.name}}</a></strong>
 								</span>
 							</td>
 							<td width="70" align="right" valign="middle">
-								<a v-if="item.comment_count" href="/t/916550#reply35" class="count_livid">{{item.comment_count}}</a>
+								<a v-if="item.comments.length" href="/t/916550#reply35" class="count_livid">{{item.comments.length}}</a>
 							</td>
 						</tr>
 					</tbody>
@@ -54,13 +54,11 @@
 	</div>
 </template>
 <script>
-	import Vmenu from "../../components/menu";
 	import axios from "../../common/httpUtils";
-//	import api from "../../api/index";
+	//	import api from "../../api/index";
 	import CONSTS from "../../common/consts";
 	import dateFormat from "../../common/dateFormat";
 	import path from "../../common/navData.js";
-	import reA from "../../components/recommendArticle.vue";
 	import utils from "../../common/utils";
 	import {
 		getArticle,
@@ -70,14 +68,12 @@
 	} from '@/api/category.js'
 	export default {
 		components: {
-			Vmenu,
-			reA,
 		},
 		data() {
 			return {
 				articleList: [],
 				category_list: [],
-//				imgUrl: api.IMGURL,
+				//				imgUrl: api.IMGURL,
 				nav: path.currentPath,
 				query: {
 					page: 1,
@@ -127,12 +123,15 @@
 					data,
 					msg
 				} = await getCategory(this.queryCategery)
+				console.log('data', data)
 				if(code == 200) {
-					this.category_list = data.data;
-					if(!this.query.category_id) {
-						this.cur_category_id = data.data[0].id;
-						this.query.category_id = this.cur_category_id;
-					}
+					this.category_list = data;
+					console.log('data', data)
+
+					//					if(!this.query.category_id) {
+					//						this.cur_category_id = data.data[0].id;
+					//						this.query.category_id = this.cur_category_id;
+					//					}
 				}
 			},
 			async getArticleFun() {
@@ -144,8 +143,7 @@
 				} = await getArticle(this.query)
 				console.log('data', data)
 				this.articleList = data;
-				if(code == 200) {
-				}
+				if(code == 200) {}
 			},
 		},
 
