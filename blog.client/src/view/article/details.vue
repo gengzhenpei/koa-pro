@@ -52,7 +52,7 @@
 						<li class="fa fa-tag"></li> 大数据</a>
 				</div>
 			</div>
-			<div v-for="(item, index) in comment_list" class="cell">
+			<div v-for="(item, index) in comment_list" :key="index" class="cell">
 				<table cellpadding="0" cellspacing="0" border="0" width="100%">
 					<tbody>
 						<tr>
@@ -69,7 +69,7 @@
 									</a> &nbsp;&nbsp; <span class="no">1</span>
 								</div>
 								<div class="sep3"></div>
-								<strong><a href="/member/tommyzhang" class="dark" v-if="item.user_info">{{item.user_info.username}}</a></strong> &nbsp;
+								<strong><a href="/member/tommyzhang" class="dark" v-if="item.User">{{item.User.name}}</a></strong> &nbsp;
 								<div class="badges"></div>&nbsp; &nbsp;<span class="ago" :title="item.created_at">{{dateFormat(item.created_at)}}</span>
 								<div class="sep5"></div>
 								<div class="reply_content">{{item.content}}</div>
@@ -115,8 +115,8 @@
 		detail,
 	} from '@/api/article.js'
 	import {
-		getCommentTargetList,
-		postComment,
+		getComments,
+		addComment,
 	} from '@/api/comment.js'
 
 	export default {
@@ -146,7 +146,7 @@
 				this.query.article_id = this.$route.params.id
 			}
 			this.Detail()
-			this.getCommentTargetListFun();
+			this.getCommentsFun();
 			var index = {
 				path: "",
 				name: "index",
@@ -164,7 +164,7 @@
 					data,
 					code,
 					msg
-				} = await postComment(this.form)
+				} = await addComment(this.form)
 				if(code == 200) {
 					this.form.content = '';
 					this.getCommentTargetListFun();
@@ -177,7 +177,7 @@
 					data,
 					code,
 					msg
-				} = await detail(this.$route.params.id)
+				} = await detail({id: this.$route.params.id})
 				if(code == 200) {
 					self.article = data;
 					document.title = data.title || '404从你的全世界路过！';
@@ -190,16 +190,16 @@
 				}
 			},
 			// 获取关联目标下的评论列表
-			async getCommentTargetListFun() {
+			async getCommentsFun() {
 				var self = this;
 				const {
 					data,
 					code,
 					msg
-				} = await getCommentTargetList(this.query)
+				} = await getComments(this.query)
 				if(code == 200) {
-					self.comment_list = data.data
-					self.comment_total = data.meta.total
+					self.comment_list = data
+					self.comment_total = data.length
 				} else {
 					console.log("服务器异常");
 				}

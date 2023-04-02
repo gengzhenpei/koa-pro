@@ -104,7 +104,7 @@
 					errorCode,
 					data,
 					msg
-				} = await registersocialInfo(this.form)
+				} = await login(this.form)
 				if(code == 200) {
 					let token = data.token;
 					localStorage.setItem('token', token)
@@ -112,9 +112,9 @@
 					localStorage.setItem('user_info', JSON.stringify(user_info))
 
 					//					window.location.href = '/'
-					this.$router.push({
-						path: '/'
-					})
+//					this.$router.push({
+//						path: '/'
+//					})
 				} else {
 					this.err_msg = msg;
 				}

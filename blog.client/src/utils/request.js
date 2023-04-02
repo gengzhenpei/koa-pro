@@ -37,9 +37,9 @@ service.interceptors.request.use(
 		// 不规范写法 可根据setting.config.js tokenName配置随意自定义headers
 		// if (token) config.headers[tokenName] = token
 		const token = localStorage.getItem('token');
-		const base64 = Base64.encode(`${token}:`)
+//		const base64 = Base64.encode(`${token}:`)
 		// 规范写法 不可随意自定义
-		if(token) config.headers['Authorization'] = `Basic ${base64}`
+		if(token) config.headers['Authorization'] = `Bearer ${token}`
 
 		if(
 			config.data &&

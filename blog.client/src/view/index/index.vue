@@ -3,16 +3,11 @@
 		<div class="sep20"></div>
 		<div class="box">
 			<div class="inner" id="Tabs">
-				<a v-for="(item,index) in category_list" :href="'/?tab='+item.id" :class="{'tab_current': cur_category_id==item.id}" class="tab">{{item.name}}</a>
+				<a v-for="(item,index) in category_list_first" :key="index" :href="'/?tab='+item.id" :class="{'tab_current': query.category_id==item.id}" class="tab">{{item.name}}</a>
 			</div>
 			<div class="cell" id="SecondaryTabs">
 				<div class="">
-					<a href="/go/all4all">二手交易</a> &nbsp; &nbsp;
-					<a href="/go/exchange">物物交换</a> &nbsp; &nbsp;
-					<a href="/go/free">免费赠送</a> &nbsp; &nbsp;
-					<a href="/go/dn">域名</a> &nbsp; &nbsp;
-					<a href="/go/tuan">团购</a> &nbsp; &nbsp;
-					<a href="/t/68631">安全提示</a>
+					<a v-for="(item, index) in category_list_second" :key="index" href="/go/all4all">{{item.name}}&nbsp; &nbsp;</a> 
 				</div>
 				<div class="fr">
 					<a href="/new/free">我要送东西</a> &nbsp; &nbsp;
@@ -67,17 +62,19 @@
 		getCategory,
 	} from '@/api/category.js'
 	export default {
-		components: {
-		},
+		components: {},
 		data() {
 			return {
 				articleList: [],
-				category_list: [],
+				all_category: [], 
+				category_list_first: [], //一级菜单
+				category_list_second: [], //二级
+				
 				//				imgUrl: api.IMGURL,
 				nav: path.currentPath,
 				query: {
 					page: 1,
-					page_size: 10,
+					page_size: 20,
 					category_id: '',
 					status: 1,
 					keyword: '',
@@ -89,14 +86,13 @@
 					status: 1,
 					name: '',
 				},
-				cur_category_id: '',
 			};
 		},
 		created() {
 			this.getData();
-			this.cur_category_id = this.$route.query.tab;
-			if(this.cur_category_id) {
-				this.query.category_id = this.cur_category_id;
+			let cur_category_id = this.$route.query.tab;
+			if(cur_category_id) {
+				this.query.category_id = cur_category_id;
 			}
 		},
 		mounted() {
@@ -116,6 +112,8 @@
 				await this.getCategoryFun()
 				await this.getArticleFun()
 			},
+			
+			//类别
 			async getCategoryFun() {
 				const {
 					code,
@@ -123,15 +121,21 @@
 					data,
 					msg
 				} = await getCategory(this.queryCategery)
-				console.log('data', data)
 				if(code == 200) {
-					this.category_list = data;
-					console.log('data', data)
-
-					//					if(!this.query.category_id) {
-					//						this.cur_category_id = data.data[0].id;
-					//						this.query.category_id = this.cur_category_id;
-					//					}
+					this.all_category = data;
+					//取一级菜单
+					this.category_list_first = data.filter(item=>item.parent_id==0);
+					
+					console.log('this.category_list_first', this.category_list_first)
+					if(!this.query.category_id) {
+						let cur_category_id = this.category_list_first[0].id;
+						console.log('this.query.category_id', this.query.category_id)
+						//二级
+						this.category_list_second = data.filter(item=>item.parent_id==cur_category_id);
+					} else {
+						this.category_list_second = data.filter(item=>item.parent_id==this.query.category_id);
+					}
+					console.log('this.category_list_second', this.category_list_second)
 				}
 			},
 			async getArticleFun() {
@@ -142,7 +146,7 @@
 					msg
 				} = await getArticle(this.query)
 				console.log('data', data)
-				this.articleList = data;
+				this.articleList = data.data;
 				if(code == 200) {}
 			},
 		},

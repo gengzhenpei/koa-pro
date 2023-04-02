@@ -3,7 +3,7 @@ import request from '@/utils/request'
 //列表 article 
 export function getArticle(data) {
   return request({
-    url: '/article/allArticle',
+    url: '/article/articleList',
     method: 'post',
     data,
   })
@@ -19,9 +19,10 @@ export function postArticle(data) {
 }
 
 //详情 article/:id get
-export function detail(id) {
+export function detail(data) {
   return request({
-    url: `/article/${id}`,
-    method: 'get',
+    url: `/article/article`,
+    method: 'post',
+    data
   })
 }

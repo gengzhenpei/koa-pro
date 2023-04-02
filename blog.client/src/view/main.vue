@@ -165,8 +165,9 @@
 
 <style>
 	#Wrapper {
-		background-color: #ffb800;
-		background-image: url('~@/static/img/shadow_light.png'), url(//static.v2ex.com/bgs/pixels.png);
+		/*background-color: #ffb800;
+		background-image: url('~@/static/img/shadow_light.png'), url(//static.v2ex.com/bgs/pixels.png);*/
+		background: #e2e2e2;
 		background-position: 0 0, 0 0;
 		background-repeat: repeat-x, repeat;
 	}
