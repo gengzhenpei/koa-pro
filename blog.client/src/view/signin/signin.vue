@@ -112,9 +112,9 @@
 					localStorage.setItem('user_info', JSON.stringify(user_info))
 
 					//					window.location.href = '/'
-//					this.$router.push({
-//						path: '/'
-//					})
+					this.$router.push({
+						path: '/'
+					})
 				} else {
 					this.err_msg = msg;
 				}
